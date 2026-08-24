@@ -167,8 +167,7 @@ export function JobApplicationModal({
       }
     }
 
-    const API_BASE_URL =
-      import.meta.env.VITE_CMS_API_URL || "https://cms-encotec.vercel.app";
+    const API_BASE_URL = import.meta.env.VITE_CMS_API_URL || "";
 
     const jobTitle = job?.title || "General Application";
     const jobDepartment = job?.dept || job?.department || "General";

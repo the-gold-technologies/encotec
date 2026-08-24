@@ -2,8 +2,7 @@ import { create } from "zustand";
 import { useEffect } from "react";
 import { defaultPagesMeta, defaultPageSections } from "./defaultData";
 
-const API_BASE_URL =
-  import.meta.env.VITE_CMS_API_URL || "https://cms-encotec.vercel.app";
+const API_BASE_URL = import.meta.env.VITE_CMS_API_URL || "";
 
 interface PageState {
   loading: boolean;

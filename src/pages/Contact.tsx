@@ -217,8 +217,7 @@ function ContactFormSection() {
     const message = (form.querySelector("#message") as HTMLTextAreaElement)
       .value;
 
-    const API_BASE_URL =
-      import.meta.env.VITE_CMS_API_URL || "https://cms-encotec.vercel.app";
+    const API_BASE_URL = import.meta.env.VITE_CMS_API_URL || "";
 
     try {
       const response = await fetch(`${API_BASE_URL}/api/enquiries`, {
