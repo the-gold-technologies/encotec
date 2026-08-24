@@ -12,11 +12,13 @@ export function CookiePolicy() {
     'Overview of cookies, statistical tracking, and privacy preference settings on Encotec Energy website.'
   );
 
-  const { data } = useSectionData<any>('cookie-policy', 'CookieContent');
+  const { data, loading } = useSectionData<any>('cookie-policy', 'CookieContent');
 
   const headline = data?.headline || 'Cookie Policy';
-  const breadcrumb = data?.breadcrumb || 'Start / Cookie Policy';
-  const contentBlocks = data?.contentBlocks;
+  let contentBlocks = data?.contentBlocks || data?.content;
+  if (typeof contentBlocks === 'string') {
+    contentBlocks = [{ type: 'paragraph', text: contentBlocks }];
+  }
 
   return (
     <div className="min-h-screen bg-white text-neutral-800 flex flex-col font-sans selection:bg-brand-pink selection:text-white">
@@ -46,7 +48,7 @@ export function CookiePolicy() {
             preserveAspectRatio="none"
           >
             <path
-              d="M0,0 C150,90 350,-40 500,45 C650,130 900,10 1200,50 L1200,120 L0,120 Z"
+              d="M0,0 C150,90 350,-40 500,45 C650,130 900,10 1200,50 L1200,120 Z"
               fill="currentColor"
             />
           </svg>
@@ -109,32 +111,14 @@ export function CookiePolicy() {
                 );
               })}
             </div>
-          ) : (
-            /* Standard Default Structured Policy Content */
-            <div className="space-y-10">
-              <section className="space-y-4">
-                <h2 className="text-2xl md:text-3xl font-bold text-neutral-900 tracking-tight pb-2 border-b border-neutral-200">
-                  Privacy Preference & Cookies Overview
-                </h2>
-                <p>
-                  We use cookies on our website www.encotecenergy.com. Some of them are essential, while others help us to improve this website and your experience.
-                </p>
-              </section>
-
-              <section className="space-y-4">
-                <h2 className="text-2xl md:text-3xl font-bold text-neutral-900 tracking-tight pb-2 border-b border-neutral-200">
-                  Contact & Inquiries
-                </h2>
-                <div className="p-6 bg-neutral-50 rounded-xl border border-neutral-200 text-neutral-800 space-y-1 font-medium">
-                  <p className="font-bold text-neutral-900">Encotec Energy (India) Pvt. Ltd.</p>
-                  <p>C-85, Sector-63</p>
-                  <p>Noida-201 301, Uttar Pradesh, India</p>
-                  <p className="pt-2 text-sm"><strong>Phone:</strong> +91 120 4155612</p>
-                  <p className="text-sm"><strong>Email:</strong> <a href="mailto:rajeev.ahuja@encotecenergy.com" className="text-brand-pink hover:underline">rajeev.ahuja@encotecenergy.com</a></p>
-                </div>
-              </section>
+          ) : loading ? (
+            <div className="space-y-4 animate-pulse">
+              <div className="h-6 bg-neutral-200 rounded w-1/3"></div>
+              <div className="h-4 bg-neutral-100 rounded w-full"></div>
+              <div className="h-4 bg-neutral-100 rounded w-5/6"></div>
+              <div className="h-4 bg-neutral-100 rounded w-4/6"></div>
             </div>
-          )}
+          ) : null}
         </div>
       </main>
 
