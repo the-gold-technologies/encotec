@@ -22,7 +22,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const cmsApiUrl = process.env.VITE_CMS_API_URL || "https://cms-encotec.vercel.app";
+    const cmsApiUrl = process.env.VITE_CMS_API_URL || "";
     
     // Forward directly to CMS backend which handles database storage & email notifications
     const cmsRes = await fetch(`${cmsApiUrl}/api/job-applications`, {

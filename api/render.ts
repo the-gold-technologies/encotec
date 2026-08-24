@@ -56,8 +56,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
   const template = fs.readFileSync(templatePath, "utf8");
 
-  const cmsApiUrl =
-    process.env.VITE_CMS_API_URL || "https://cms-encotec.vercel.app";
+  const cmsApiUrl = process.env.VITE_CMS_API_URL || "";
   const urlPath = req.url || "/";
   const slug = getSlugFromPath(urlPath);
 
