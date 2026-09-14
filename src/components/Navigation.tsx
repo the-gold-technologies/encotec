@@ -90,12 +90,12 @@ export function Navigation({ variant = "light" }: NavigationProps) {
           <Link to="/careers" className={getLinkClass("/careers")}>
             Careers
           </Link>
-          <Link
+          {/* <Link
             to="/certifications"
             className={getLinkClass("/certifications")}
           >
             Certifications
-          </Link>
+          </Link> */}
           <Link to="/leadership" className={getLinkClass("/leadership")}>
             Leadership
           </Link>
@@ -141,69 +141,71 @@ export function Navigation({ variant = "light" }: NavigationProps) {
             {/* 70% wide panel */}
             <motion.div
               key="panel"
-              initial={{ x: '100%' }}
+              initial={{ x: "100%" }}
               animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'tween', duration: 0.3 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "tween", duration: 0.3 }}
               className="fixed top-0 right-0 bottom-0 w-[70%] bg-white z-[110] lg:hidden flex flex-col"
             >
-            {/* Panel header — logo + close in one row */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-100">
-              <img
-                src="/encotec-logo.png"
-                alt="Encotec"
-                className="h-7 w-auto object-contain"
-              />
-              <button
-                onClick={() => setMobileMenuOpen(false)}
-                className="w-8 h-8 flex items-center justify-center text-neutral-500 hover:text-brand-pink transition-colors"
-                aria-label="Close menu"
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            {/* Nav links */}
-            <div className="flex-1 flex flex-col px-8 pt-8 pb-8 overflow-y-auto">
-              <div className="flex flex-col gap-6">
-                {[
-                  { to: '/',               label: 'Home' },
-                  { to: '/about',          label: 'About' },
-                  { to: '/services',       label: 'Services' },
-                  { to: '/insights',       label: 'Insights' },
-                  { to: '/careers',        label: 'Careers' },
-                  { to: '/certifications', label: 'Certifications' },
-                  { to: '/leadership',     label: 'Leadership' },
-                ].map(({ to, label }) => (
-                  <Link
-                    key={to}
-                    to={to}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={getMobileLinkClass(to)}>
-                    {label}
-                  </Link>
-                ))}
-              </div>
-
-              {/* Contact CTA */}
-              <div className="mt-10 pt-8 border-t border-neutral-200">
-                <Link
-                  to="/contact"
+              {/* Panel header — logo + close in one row */}
+              <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-100">
+                <img
+                  src="/encotec-logo.png"
+                  alt="Encotec"
+                  className="h-7 w-auto object-contain"
+                />
+                <button
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block w-full text-center px-6 py-3.5 bg-brand-pink text-white text-sm font-bold tracking-wider uppercase hover:bg-[#a0004f] transition-colors duration-300">
-                  Contact Us
-                </Link>
+                  className="w-8 h-8 flex items-center justify-center text-neutral-500 hover:text-brand-pink transition-colors"
+                  aria-label="Close menu"
+                >
+                  <X size={20} />
+                </button>
               </div>
 
-              {/* Since badge */}
-              <div className="mt-auto pt-8">
-                <div className="flex items-center gap-2 px-3 py-2 rounded-full border border-neutral-200 text-xs font-medium text-neutral-600 w-fit">
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
-                  SINCE 2011
+              {/* Nav links */}
+              <div className="flex-1 flex flex-col px-8 pt-8 pb-8 overflow-y-auto">
+                <div className="flex flex-col gap-6">
+                  {[
+                    { to: "/", label: "Home" },
+                    { to: "/about", label: "About" },
+                    { to: "/services", label: "Services" },
+                    { to: "/insights", label: "Insights" },
+                    { to: "/careers", label: "Careers" },
+                    // { to: "/certifications", label: "Certifications" },
+                    { to: "/leadership", label: "Leadership" },
+                  ].map(({ to, label }) => (
+                    <Link
+                      key={to}
+                      to={to}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={getMobileLinkClass(to)}
+                    >
+                      {label}
+                    </Link>
+                  ))}
+                </div>
+
+                {/* Contact CTA */}
+                <div className="mt-10 pt-8 border-t border-neutral-200">
+                  <Link
+                    to="/contact"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block w-full text-center px-6 py-3.5 bg-brand-pink text-white text-sm font-bold tracking-wider uppercase hover:bg-[#a0004f] transition-colors duration-300"
+                  >
+                    Contact Us
+                  </Link>
+                </div>
+
+                {/* Since badge */}
+                <div className="mt-auto pt-8">
+                  <div className="flex items-center gap-2 px-3 py-2 rounded-full border border-neutral-200 text-xs font-medium text-neutral-600 w-fit">
+                    <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
+                    SINCE 2011
+                  </div>
                 </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
           </>
         )}
       </AnimatePresence>

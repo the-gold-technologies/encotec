@@ -15,7 +15,6 @@ export function CTA() {
     ? phone
     : `tel:${phone.replace(/\s+/g, "")}`;
 
-
   return (
     <>
       <section className="py-32 relative overflow-hidden flex items-center justify-center">
