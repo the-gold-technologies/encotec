@@ -15,10 +15,9 @@ export function CTA() {
     ? phone
     : `tel:${phone.replace(/\s+/g, "")}`;
 
-
   return (
     <>
-      <section className="py-32 relative overflow-hidden flex items-center justify-center">
+      <section className="pt-32 pb-12 relative overflow-hidden flex items-center justify-center">
         {/* Background Gradient Animation */}
         <div className="absolute inset-0 bg-gradient-brand opacity-10" />
         <motion.div
