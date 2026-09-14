@@ -33,7 +33,7 @@ export function Footer({
     <>
       <div className="mb-10 border-b border-neutral-200/70 pb-8 text-center">
         <div className="grid grid-cols-1 items-start gap-8 px-6 pb-5 pt-0 md:grid-cols-3 md:gap-5 md:px-12">
-          {certificates.map((certificate) => (
+          {certificates.map((certificate, index) => (
             <div
               key={certificate.src}
               className="flex min-w-0 flex-col items-center justify-self-center text-center"
@@ -41,7 +41,10 @@ export function Footer({
               <img
                 src={certificate.src}
                 alt={certificate.alt}
-                className="h-24 w-24 shrink-0 object-contain mix-blend-multiply md:h-28 md:w-28"
+                className="h-24 w-24 shrink-0 object-cover mix-blend-multiply md:h-28 md:w-28"
+                style={{
+                  transform: `scale(${[1, 1.18, 1.32][index] || 1})`,
+                }}
               />
               <span className="mt-[10px] text-center text-[10px] font-medium tracking-wide text-[#333333] md:text-xs">
                 {certificate.description}
