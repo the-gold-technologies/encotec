@@ -148,7 +148,7 @@ export function CTA() {
             {data.footerNote}
           </motion.p>
 
-          <Footer variant="embedded" />
+          <Footer variant="embedded" showCertificates />
         </div>
       </section>
 
