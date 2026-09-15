@@ -5,6 +5,7 @@ import { useSectionData } from "../store/useCMSStore";
 interface FooterProps {
   className?: string;
   variant?: "standalone" | "embedded";
+  showCertificates?: boolean;
 }
 
 interface FooterCertificate {
@@ -20,6 +21,7 @@ interface FooterCMSData {
 export function Footer({
   className = "",
   variant = "standalone",
+  showCertificates = false,
 }: FooterProps) {
   const { data: footerData } = useSectionData<FooterCMSData>(
     "home",
@@ -31,28 +33,30 @@ export function Footer({
 
   const content = (
     <>
-      <div className="mb-10 border-b border-neutral-200/70 pb-8 text-center">
-        <div className="grid grid-cols-1 items-start gap-8 px-6 pb-5 pt-0 md:grid-cols-3 md:gap-5 md:px-12">
-          {certificates.map((certificate, index) => (
-            <div
-              key={certificate.src}
-              className="flex min-w-0 flex-col items-center justify-self-center text-center"
-            >
-              <img
-                src={certificate.src}
-                alt={certificate.alt}
-                className="h-24 w-24 shrink-0 object-cover mix-blend-multiply md:h-28 md:w-28"
-                style={{
-                  transform: `scale(${[1, 1.18, 1.32][index] || 1})`,
-                }}
-              />
-              <span className="mt-[10px] text-center text-[10px] font-medium tracking-wide text-[#333333] md:text-xs">
-                {certificate.description}
-              </span>
-            </div>
-          ))}
+      {showCertificates && (
+        <div className="mb-10 border-b border-neutral-200/70 pb-8 text-center">
+          <div className="grid grid-cols-1 items-start gap-8 px-6 pb-5 pt-0 md:grid-cols-3 md:gap-5 md:px-12">
+            {certificates.map((certificate, index) => (
+              <div
+                key={certificate.src}
+                className="flex min-w-0 flex-col items-center justify-self-center text-center"
+              >
+                <img
+                  src={certificate.src}
+                  alt={certificate.alt}
+                  className="h-24 w-24 shrink-0 object-cover mix-blend-multiply md:h-28 md:w-28"
+                  style={{
+                    transform: `scale(${[1, 1.18, 1.32][index] || 1})`,
+                  }}
+                />
+                <span className="mt-[10px] text-center text-[10px] font-medium tracking-wide text-[#333333] md:text-xs">
+                  {certificate.description}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
       <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
         <Link to="/" className="flex items-center">
           <img
