@@ -87,6 +87,10 @@ export function Footer({
         </div>
         <div>© 2026 Encotec Energy (India) Pvt. Ltd.</div>
       </div>
+      <div className="mt-2 text-right text-[8px] text-neutral-400">
+        Designed & developed by{" "}
+        <a href="https://thegoldtechnologies.com">TGT</a>
+      </div>
     </>
   );
 
