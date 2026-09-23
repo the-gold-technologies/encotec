@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Footer } from "../components/Footer";
 import { Navigation } from "../components/Navigation";
-import { JobApplicationModal, JobOpening } from "../components/JobApplicationModal";
+import {
+  JobApplicationModal,
+  JobOpening,
+} from "../components/JobApplicationModal";
 import {
   motion,
   useScroll,
@@ -314,8 +317,8 @@ function BenefitsSection() {
   const rawBenefits = Array.isArray(data.benefitsList)
     ? data.benefitsList
     : Array.isArray(data.benefits)
-    ? data.benefits
-    : [];
+      ? data.benefits
+      : [];
 
   const benefits = rawBenefits.map((b: any, i: number) => ({
     ...b,
@@ -401,21 +404,17 @@ function BenefitsSection() {
   );
 }
 
-function OpenPositionsSection({
-  onApply,
-}: {
-  onApply: (job: any) => void;
-}) {
+function OpenPositionsSection({ onApply }: { onApply: (job: any) => void }) {
   const { data } = useSectionData<any>("careers", "CareersOpenPositions");
 
   const heading = data.heading || data.title;
   const rawJobs = Array.isArray(data.jobsList)
     ? data.jobsList
     : Array.isArray(data.jobs)
-    ? data.jobs
-    : Array.isArray(data.openings)
-    ? data.openings
-    : [];
+      ? data.jobs
+      : Array.isArray(data.openings)
+        ? data.openings
+        : [];
 
   const jobs = rawJobs.map((job: any, index: number) => ({
     ...job,
@@ -431,7 +430,7 @@ function OpenPositionsSection({
 
   // Dynamically extract department list from actual jobs returned from CMS
   const dynamicDepts = Array.from(
-    new Set<string>(jobs.map((j: any) => String(j.dept)).filter(Boolean))
+    new Set<string>(jobs.map((j: any) => String(j.dept)).filter(Boolean)),
   );
   const filters: string[] = ["All", ...dynamicDepts];
 
@@ -596,12 +595,12 @@ function CultureGallery() {
   const tagline = data.tagline;
   const heading = data.heading;
   const gallery: Array<{ image: string; caption: string }> = Array.isArray(
-    data.galleryList
+    data.galleryList,
   )
     ? data.galleryList
     : Array.isArray(data.gallery)
-    ? data.gallery
-    : [];
+      ? data.gallery
+      : [];
 
   if (!heading && gallery.length === 0) return null;
 
@@ -685,14 +684,14 @@ function ApplicationProcess() {
   const heading = data.heading;
   const subtitle = data.subtitle;
   const steps: Array<{ step: string; title: string; desc: string }> =
-    Array.isArray(data.stepsList)
-      ? data.stepsList
-      : Array.isArray(data.steps)
-      ? data.steps
-      : [];
+    Array.isArray(data.processSteps)
+      ? data.processSteps
+      : Array.isArray(data.processSteps)
+        ? data.processSteps
+        : [];
 
   if (!heading && steps.length === 0) return null;
-
+  console.log(data);
   return (
     <section className="py-32 bg-neutral-50 border-t border-neutral-200">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
@@ -773,11 +772,7 @@ function ApplicationProcess() {
   );
 }
 
-function CTASection({
-  onApplyGeneral,
-}: {
-  onApplyGeneral: () => void;
-}) {
+function CTASection({ onApplyGeneral }: { onApplyGeneral: () => void }) {
   const { data } = useSectionData<any>("careers", "CareersCTA");
 
   const ctaHeading = data.ctaHeading || data.heading;
