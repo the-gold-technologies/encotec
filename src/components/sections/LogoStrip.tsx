@@ -67,7 +67,7 @@ export function LogoStrip() {
               key={i}
               src={logo.image}
               alt={logo.name}
-              className="h-10 md:h-14 max-w-[160px] object-contain grayscale hover:grayscale-0 opacity-80 hover:opacity-100 hover:scale-110 transition-all duration-300 flex-shrink-0 cursor-pointer"
+              className="h-10 md:h-14 max-w-[160px] object-contain transition-all duration-300 flex-shrink-0 cursor-pointer"
             />
           ))}
         </div>
