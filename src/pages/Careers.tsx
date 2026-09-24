@@ -408,6 +408,7 @@ function OpenPositionsSection({ onApply }: { onApply: (job: any) => void }) {
   const { data } = useSectionData<any>("careers", "CareersOpenPositions");
 
   const heading = data.heading || data.title;
+
   const rawJobs = Array.isArray(data.jobsList)
     ? data.jobsList
     : Array.isArray(data.jobs)
@@ -416,26 +417,42 @@ function OpenPositionsSection({ onApply }: { onApply: (job: any) => void }) {
         ? data.openings
         : [];
 
+  /*
+   * Normalize jobs coming from CMS
+   */
   const jobs = rawJobs.map((job: any, index: number) => ({
     ...job,
+
     id: job.id || index + 1,
-    title: job.title || "",
+
+    title: (job.title || "").replace(/^Profile:\s*/i, ""),
+
     dept: job.dept || job.department || "General",
+
     location: job.location || "",
+
     type: job.type || "Full-time",
-    desc: job.desc || job.description || "",
+
+    // Keep the COMPLETE job description
+    desc: Array.isArray(job.desc) ? job.desc : [],
   }));
 
   const [activeFilter, setActiveFilter] = useState("All");
 
-  // Dynamically extract department list from actual jobs returned from CMS
+  /*
+   * Dynamically extract departments
+   */
   const dynamicDepts = Array.from(
-    new Set<string>(jobs.map((j: any) => String(j.dept)).filter(Boolean)),
+    new Set<string>(jobs.map((job: any) => String(job.dept)).filter(Boolean)),
   );
+
   const filters: string[] = ["All", ...dynamicDepts];
 
   const filteredJobs = jobs.filter((job: any) => {
-    if (activeFilter === "All") return true;
+    if (activeFilter === "All") {
+      return true;
+    }
+
     return job.dept === activeFilter;
   });
 
@@ -443,18 +460,40 @@ function OpenPositionsSection({ onApply }: { onApply: (job: any) => void }) {
     switch (dept) {
       case "Engineering":
         return "bg-blue-500 text-white";
+
       case "Project Management":
         return "bg-purple-500 text-white";
+
       case "Operations":
         return "bg-green-500 text-white";
+
       case "Corporate":
         return "bg-orange-500 text-white";
+
+      case "HR":
+        return "bg-pink-500 text-white";
+
+      case "Finance":
+      case "Finance & Accounts":
+        return "bg-emerald-500 text-white";
+
+      case "EHS":
+      case "Safety":
+        return "bg-red-500 text-white";
+
+      case "Contracts":
+      case "Materials":
+      case "Contracts & Materials":
+        return "bg-indigo-500 text-white";
+
       default:
         return "bg-neutral-800 text-white";
     }
   };
 
-  if (!heading && jobs.length === 0) return null;
+  if (!heading && jobs.length === 0) {
+    return null;
+  }
 
   return (
     <section id="open-positions" className="py-32 bg-white min-h-screen">
@@ -486,9 +525,14 @@ function OpenPositionsSection({ onApply }: { onApply: (job: any) => void }) {
                 <button
                   key={filter}
                   onClick={() => setActiveFilter(filter)}
-                  className={`relative pb-4 text-sm font-bold tracking-wider uppercase transition-colors duration-300 ${activeFilter === filter ? "text-brand-pink" : "text-neutral-500 hover:text-neutral-900"}`}
+                  className={`relative pb-4 text-sm font-bold tracking-wider uppercase transition-colors duration-300 ${
+                    activeFilter === filter
+                      ? "text-brand-pink"
+                      : "text-neutral-500 hover:text-neutral-900"
+                  }`}
                 >
                   {filter}
+
                   {activeFilter === filter && (
                     <motion.div
                       layoutId="jobTab"
@@ -506,7 +550,10 @@ function OpenPositionsSection({ onApply }: { onApply: (job: any) => void }) {
           )}
         </motion.div>
 
-        {/* Job List */}
+        {/* ================================================== */}
+        {/* JOB LIST */}
+        {/* ================================================== */}
+
         <motion.div layout className="space-y-4">
           <AnimatePresence mode="popLayout">
             {filteredJobs.map((job: any, index: number) => (
@@ -535,23 +582,35 @@ function OpenPositionsSection({ onApply }: { onApply: (job: any) => void }) {
                 whileHover={{
                   y: -4,
                 }}
-                className="group p-8 bg-white border border-neutral-200 hover:border-brand-pink/50 hover:shadow-lg transition-all duration-300 flex flex-col md:flex-row md:items-center justify-between gap-6"
+                className="group p-8 bg-white border border-neutral-200 hover:border-brand-pink/50 hover:shadow-lg transition-all duration-300 flex flex-col md:flex-row md:items-start justify-between gap-6"
               >
-                <div className="flex-grow">
+                {/* ================================================== */}
+                {/* JOB INFORMATION */}
+                {/* ================================================== */}
+
+                <div className="flex-grow min-w-0">
+                  {/* Meta information */}
                   <div className="flex flex-wrap items-center gap-3 mb-3">
+                    {/* Department */}
                     {job.dept && (
                       <span
-                        className={`px-3 py-1 text-[10px] font-bold uppercase tracking-wider ${getDeptColor(job.dept)}`}
+                        className={`px-3 py-1 text-[10px] font-bold uppercase tracking-wider ${getDeptColor(
+                          job.dept,
+                        )}`}
                       >
                         {job.dept}
                       </span>
                     )}
+
+                    {/* Location */}
                     {job.location && (
                       <span className="flex items-center gap-1.5 text-xs font-medium text-neutral-500">
                         <MapPinIcon size={14} />
                         {job.location}
                       </span>
                     )}
+
+                    {/* Employment type */}
                     {job.type && (
                       <span className="flex items-center gap-1.5 text-xs font-medium text-neutral-500">
                         <BriefcaseIcon size={14} />
@@ -559,13 +618,124 @@ function OpenPositionsSection({ onApply }: { onApply: (job: any) => void }) {
                       </span>
                     )}
                   </div>
-                  <h3 className="text-2xl font-black text-neutral-900 mb-2 group-hover:text-brand-pink transition-colors">
+
+                  {/* ================================================== */}
+                  {/* TITLE */}
+                  {/* ================================================== */}
+
+                  <h3 className="text-2xl font-black text-neutral-900 mb-5 group-hover:text-brand-pink transition-colors">
                     {job.title}
                   </h3>
-                  {job.desc && <p className="text-neutral-600">{job.desc}</p>}
+
+                  {/* ================================================== */}
+                  {/* COMPLETE JOB DESCRIPTION */}
+                  {/* ================================================== */}
+
+                  {Array.isArray(job.desc) && job.desc.length > 0 && (
+                    <div className="text-neutral-600 space-y-5">
+                      {job.desc.map((block: any, blockIndex: number) => {
+                        /* ----------------------------- */
+                        /* PARAGRAPH */
+                        /* ----------------------------- */
+
+                        if (block.type === "paragraph") {
+                          return (
+                            <p key={blockIndex} className="leading-relaxed">
+                              {block.text}
+                            </p>
+                          );
+                        }
+
+                        /* ----------------------------- */
+                        /* HEADING */
+                        /* ----------------------------- */
+
+                        if (block.type === "heading") {
+                          return (
+                            <h4
+                              key={blockIndex}
+                              className="text-lg font-bold text-neutral-900 pt-2"
+                            >
+                              {block.text}
+                            </h4>
+                          );
+                        }
+
+                        /* ----------------------------- */
+                        /* QUOTE */
+                        /* ----------------------------- */
+
+                        if (block.type === "quote") {
+                          return (
+                            <blockquote
+                              key={blockIndex}
+                              className="border-l-4 border-brand-pink pl-4 italic text-neutral-700"
+                            >
+                              {block.text}
+                            </blockquote>
+                          );
+                        }
+
+                        /* ----------------------------- */
+                        /* LIST */
+                        /* ----------------------------- */
+
+                        if (
+                          block.type === "list" &&
+                          Array.isArray(block.items)
+                        ) {
+                          return (
+                            <ul
+                              key={blockIndex}
+                              className="list-disc pl-6 space-y-2"
+                            >
+                              {block.items.map(
+                                (item: string, itemIndex: number) => (
+                                  <li
+                                    key={itemIndex}
+                                    className="leading-relaxed"
+                                  >
+                                    {item}
+                                  </li>
+                                ),
+                              )}
+                            </ul>
+                          );
+                        }
+
+                        /* ----------------------------- */
+                        /* IMAGE */
+                        /* ----------------------------- */
+
+                        if (
+                          block.type === "image" &&
+                          (block.image || block.url || block.text)
+                        ) {
+                          return (
+                            <div
+                              key={blockIndex}
+                              className="my-4 overflow-hidden rounded-xl border border-neutral-200"
+                            >
+                              <img
+                                src={block.image || block.url || block.text}
+                                alt={block.alt || "Job description"}
+                                className="max-w-full h-auto"
+                              />
+                            </div>
+                          );
+                        }
+
+                        return null;
+                      })}
+                    </div>
+                  )}
                 </div>
 
-                <div className="flex-shrink-0">
+                {/* ================================================== */}
+                {/* APPLY BUTTON */}
+                {/* ================================================== */}
+
+                <div className="flex-shrink-0 md:pt-1">
                   <button
                     onClick={() => onApply(job)}
                     className="inline-flex items-center gap-2 px-6 py-3 bg-neutral-900 text-white text-sm font-bold tracking-wider uppercase hover:bg-brand-pink transition-colors duration-300 cursor-pointer"
@@ -578,6 +748,10 @@ function OpenPositionsSection({ onApply }: { onApply: (job: any) => void }) {
             ))}
           </AnimatePresence>
         </motion.div>
+
+        {/* ================================================== */}
+        {/* EMPTY STATE */}
+        {/* ================================================== */}
 
         {filteredJobs.length === 0 && (
           <div className="py-20 text-center text-neutral-500">
