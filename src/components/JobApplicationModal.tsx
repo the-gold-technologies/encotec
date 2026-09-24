@@ -17,7 +17,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 
-interface JobOpening {
+export interface JobOpening {
   title?: string;
   dept?: string;
   department?: string;
@@ -49,7 +49,9 @@ export function JobApplicationModal({
   const [isDragging, setIsDragging] = useState(false);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+  const [submitStatus, setSubmitStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -206,7 +208,7 @@ export function JobApplicationModal({
 
       if (!response.ok) {
         throw new Error(
-          "Unable to submit your application. Please try again or reach out to careers@encotecenergy.com."
+          "Unable to submit your application. Please try again or reach out to careers@encotecenergy.com.",
         );
       }
 
@@ -215,7 +217,7 @@ export function JobApplicationModal({
       console.error("Job application submission error:", err);
       setErrorMessage(
         err.message ||
-          "Failed to submit application. Please try again or reach out directly to careers@encotecenergy.com."
+          "Failed to submit application. Please try again or reach out directly to careers@encotecenergy.com.",
       );
       setSubmitStatus("error");
     } finally {
@@ -269,7 +271,11 @@ export function JobApplicationModal({
                     You're All Set!
                   </h3>
                   <p className="text-neutral-300 text-sm mt-1">
-                    Your application for <span className="text-brand-pink font-semibold">{job?.title || "the open role"}</span> has been forwarded to our talent acquisition team.
+                    Your application for{" "}
+                    <span className="text-brand-pink font-semibold">
+                      {job?.title || "the open role"}
+                    </span>{" "}
+                    has been forwarded to our talent acquisition team.
                   </p>
                 </div>
               ) : (
@@ -293,10 +299,13 @@ export function JobApplicationModal({
                   </div>
 
                   <h3 className="text-2xl sm:text-3xl font-black text-white leading-tight">
-                    {job?.title ? `Apply for ${job.title}` : "Submit Your Application"}
+                    {job?.title
+                      ? `Apply for ${job.title}`
+                      : "Submit Your Application"}
                   </h3>
                   <p className="text-neutral-300 text-sm mt-1.5">
-                    Fill in your details below. Your resume and application will be reviewed by our HR team.
+                    Fill in your details below. Your resume and application will
+                    be reviewed by our HR team.
                   </p>
                 </div>
               )}
@@ -310,34 +319,57 @@ export function JobApplicationModal({
                   <div className="text-center">
                     <div className="relative inline-flex items-center justify-center mb-4">
                       <div className="w-20 h-20 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center border-4 border-emerald-100 shadow-lg shadow-emerald-500/10 animate-bounce-short">
-                        <CheckCircle2 size={42} className="text-emerald-500 stroke-[2.5]" />
+                        <CheckCircle2
+                          size={42}
+                          className="text-emerald-500 stroke-[2.5]"
+                        />
                       </div>
                     </div>
                     <h4 className="text-2xl font-black text-neutral-900">
                       Application Submitted Successfully!
                     </h4>
                     <p className="text-neutral-600 text-sm max-w-md mx-auto mt-2 leading-relaxed">
-                      Thank you, <strong className="text-neutral-900">{fullName}</strong>! We have received your application for <strong className="text-neutral-900">{job?.title || "the position"}</strong>.
+                      Thank you,{" "}
+                      <strong className="text-neutral-900">{fullName}</strong>!
+                      We have received your application for{" "}
+                      <strong className="text-neutral-900">
+                        {job?.title || "the position"}
+                      </strong>
+                      .
                     </p>
                   </div>
 
                   {/* Summary Card */}
                   <div className="bg-neutral-50 rounded-2xl p-5 border border-neutral-200/80 space-y-3 text-xs">
                     <div className="flex items-center justify-between border-b border-neutral-200/60 pb-2.5">
-                      <span className="text-neutral-500 font-semibold uppercase tracking-wider">Candidate Name</span>
-                      <span className="font-bold text-neutral-900">{fullName}</span>
+                      <span className="text-neutral-500 font-semibold uppercase tracking-wider">
+                        Candidate Name
+                      </span>
+                      <span className="font-bold text-neutral-900">
+                        {fullName}
+                      </span>
                     </div>
                     <div className="flex items-center justify-between border-b border-neutral-200/60 pb-2.5">
-                      <span className="text-neutral-500 font-semibold uppercase tracking-wider">Email Address</span>
-                      <span className="font-medium text-neutral-900">{email}</span>
+                      <span className="text-neutral-500 font-semibold uppercase tracking-wider">
+                        Email Address
+                      </span>
+                      <span className="font-medium text-neutral-900">
+                        {email}
+                      </span>
                     </div>
                     <div className="flex items-center justify-between border-b border-neutral-200/60 pb-2.5">
-                      <span className="text-neutral-500 font-semibold uppercase tracking-wider">Position Applied</span>
-                      <span className="font-bold text-brand-pink">{job?.title || "General Application"}</span>
+                      <span className="text-neutral-500 font-semibold uppercase tracking-wider">
+                        Position Applied
+                      </span>
+                      <span className="font-bold text-brand-pink">
+                        {job?.title || "General Application"}
+                      </span>
                     </div>
                     {resumeFile && (
                       <div className="flex items-center justify-between">
-                        <span className="text-neutral-500 font-semibold uppercase tracking-wider">Attached Resume</span>
+                        <span className="text-neutral-500 font-semibold uppercase tracking-wider">
+                          Attached Resume
+                        </span>
                         <span className="font-mono font-medium text-neutral-800 flex items-center gap-1">
                           <FileText size={13} className="text-brand-pink" />
                           {resumeFile.name}
@@ -356,22 +388,34 @@ export function JobApplicationModal({
                         <div className="text-[11px] font-bold text-emerald-600 uppercase mb-1 flex items-center gap-1">
                           <CheckCircle2 size={12} /> Step 1: Logged
                         </div>
-                        <div className="text-xs font-bold text-neutral-900">Application Stored</div>
-                        <div className="text-[11px] text-neutral-500 mt-0.5">Sent to Encotec HR team</div>
+                        <div className="text-xs font-bold text-neutral-900">
+                          Application Stored
+                        </div>
+                        <div className="text-[11px] text-neutral-500 mt-0.5">
+                          Sent to Encotec HR team
+                        </div>
                       </div>
                       <div className="bg-white rounded-xl p-3.5 border border-neutral-200 shadow-xs">
                         <div className="text-[11px] font-bold text-brand-pink uppercase mb-1 flex items-center gap-1">
                           <Clock size={12} /> Step 2: Review
                         </div>
-                        <div className="text-xs font-bold text-neutral-900">Profile Screening</div>
-                        <div className="text-[11px] text-neutral-500 mt-0.5">Evaluated against opening</div>
+                        <div className="text-xs font-bold text-neutral-900">
+                          Profile Screening
+                        </div>
+                        <div className="text-[11px] text-neutral-500 mt-0.5">
+                          Evaluated against opening
+                        </div>
                       </div>
                       <div className="bg-white rounded-xl p-3.5 border border-neutral-200 shadow-xs">
                         <div className="text-[11px] font-bold text-neutral-400 uppercase mb-1 flex items-center gap-1">
                           <ArrowRight size={12} /> Step 3: Connect
                         </div>
-                        <div className="text-xs font-bold text-neutral-900">Interview Schedule</div>
-                        <div className="text-[11px] text-neutral-500 mt-0.5">If shortlisted by panel</div>
+                        <div className="text-xs font-bold text-neutral-900">
+                          Interview Schedule
+                        </div>
+                        <div className="text-[11px] text-neutral-500 mt-0.5">
+                          If shortlisted by panel
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -475,7 +519,8 @@ export function JobApplicationModal({
                   {/* Resume Upload Area */}
                   <div>
                     <label className="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-2">
-                      Upload Resume / CV <span className="text-brand-pink">*</span>
+                      Upload Resume / CV{" "}
+                      <span className="text-brand-pink">*</span>
                     </label>
 
                     <input
@@ -483,7 +528,9 @@ export function JobApplicationModal({
                       type="file"
                       accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                       onChange={(e) =>
-                        handleFileChange(e.target.files ? e.target.files[0] : null)
+                        handleFileChange(
+                          e.target.files ? e.target.files[0] : null,
+                        )
                       }
                       className="hidden"
                     />
@@ -538,7 +585,8 @@ export function JobApplicationModal({
                             onClick={() => {
                               setResumeFile(null);
                               setResumeBase64("");
-                              if (fileInputRef.current) fileInputRef.current.value = "";
+                              if (fileInputRef.current)
+                                fileInputRef.current.value = "";
                             }}
                             className="text-neutral-400 hover:text-red-600 p-1.5 rounded-xl hover:bg-red-50 transition-colors cursor-pointer"
                             title="Remove file"
@@ -563,7 +611,10 @@ export function JobApplicationModal({
                       htmlFor="app-coverLetter"
                       className="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-2"
                     >
-                      Cover Letter / Note <span className="text-neutral-400 font-normal">(Optional)</span>
+                      Cover Letter / Note{" "}
+                      <span className="text-neutral-400 font-normal">
+                        (Optional)
+                      </span>
                     </label>
                     <textarea
                       id="app-coverLetter"
@@ -595,7 +646,8 @@ export function JobApplicationModal({
                       )}
                     </button>
                     <p className="text-[11px] text-center text-neutral-500 mt-2.5">
-                      By submitting, you agree to the processing of your details for recruitment at Encotec.
+                      By submitting, you agree to the processing of your details
+                      for recruitment at Encotec.
                     </p>
                   </div>
                 </form>
