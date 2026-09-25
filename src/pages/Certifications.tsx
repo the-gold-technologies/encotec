@@ -63,7 +63,8 @@ function CertificationsHero() {
   const { data } = useSectionData<any>("certifications", "CertificationsHero");
 
   const heroTitle = data?.heroTitle || data?.title;
-  const heroSubtitle = data?.heroSubtitle || data?.subtitle || data?.description;
+  const heroSubtitle =
+    data?.heroSubtitle || data?.subtitle || data?.description;
   const tagline = data?.tagline || data?.heroTagline;
   const bgImage = data?.backgroundImage || data?.heroImage || data?.image;
 
@@ -257,7 +258,9 @@ function CertificationsHero() {
 
 // Official ISO Certificates Showcase Section (Fully Dynamic CMS)
 function OfficialCertificatesShowcase() {
-  const [activeCertificate, setActiveCertificate] = React.useState<any | null>(null);
+  const [activeCertificate, setActiveCertificate] = React.useState<any | null>(
+    null,
+  );
 
   const { data } = useSectionData<any>("certifications", "CertificationsGrid");
 
@@ -265,13 +268,15 @@ function OfficialCertificatesShowcase() {
   const heading = data?.heading;
   const description = data?.description;
 
-  const officialCertificates: Array<any> = Array.isArray(data?.certificationsList) && data.certificationsList.length > 0
-    ? data.certificationsList
-    : Array.isArray(data?.certifications) && data.certifications.length > 0
-      ? data.certifications
-      : Array.isArray(data?.items) && data.items.length > 0
-        ? data.items
-        : [];
+  const officialCertificates: Array<any> =
+    Array.isArray(data?.certificationsList) &&
+    data.certificationsList.length > 0
+      ? data.certificationsList
+      : Array.isArray(data?.certifications) && data.certifications.length > 0
+        ? data.certifications
+        : Array.isArray(data?.items) && data.items.length > 0
+          ? data.items
+          : [];
 
   // Hide section completely if no heading and no certificates exist
   if (!heading && officialCertificates.length === 0) {
@@ -321,7 +326,8 @@ function OfficialCertificatesShowcase() {
         {/* Certificates Document Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 items-stretch">
           {officialCertificates.map((cert: any, index: number) => {
-            const certImg = cert.image || cert.certImage || cert.documentImage || cert.file;
+            const certImg =
+              cert.image || cert.certImage || cert.documentImage || cert.file;
             const categoryText = cert.category || cert.badge || "Accreditation";
             const codeText = cert.certNumber || cert.code;
             const issueDate = cert.issueDate || cert.validFrom;
@@ -335,7 +341,9 @@ function OfficialCertificatesShowcase() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.15 }}
                 className="flex flex-col justify-between group cursor-pointer h-full"
-                onClick={() => setActiveCertificate({ ...cert, image: certImg })}
+                onClick={() =>
+                  setActiveCertificate({ ...cert, image: certImg })
+                }
               >
                 <div>
                   {/* Document Header Tag */}
@@ -374,8 +382,19 @@ function OfficialCertificatesShowcase() {
                         {/* Hover Overlay Hint */}
                         <div className="absolute inset-0 bg-neutral-950/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-3 p-6 text-center backdrop-blur-[2px]">
                           <span className="w-12 h-12 rounded-full bg-white text-brand-pink flex items-center justify-center shadow-xl transform scale-75 group-hover:scale-100 transition-transform duration-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="w-6 h-6"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              strokeWidth={2}
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"
+                              />
                             </svg>
                           </span>
                           <span className="text-xs font-bold text-white uppercase tracking-wider bg-neutral-900/80 px-4 py-2 rounded-full border border-white/20 shadow-lg">
@@ -404,15 +423,33 @@ function OfficialCertificatesShowcase() {
                 <div className="mt-4 flex items-center justify-between text-xs text-neutral-500 px-1 pt-2 border-t border-neutral-100">
                   <span className="font-medium text-neutral-600">
                     {issueDate || expiryDate ? (
-                      <>Valid: <strong className="text-neutral-900">{issueDate} &ndash; {expiryDate}</strong></>
+                      <>
+                        Valid:{" "}
+                        <strong className="text-neutral-900">
+                          {issueDate} &ndash; {expiryDate}
+                        </strong>
+                      </>
                     ) : (
-                      <strong className="text-neutral-900">Official Certification</strong>
+                      <strong className="text-neutral-900">
+                        Official Certification
+                      </strong>
                     )}
                   </span>
                   <span className="font-bold text-brand-pink flex items-center gap-1 group-hover:translate-x-1 transition-transform">
                     Enlarge Document
-                    <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-3.5 h-3.5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M9 5l7 7-7 7"
+                      />
                     </svg>
                   </span>
                 </div>
@@ -432,8 +469,19 @@ function OfficialCertificatesShowcase() {
               onClick={() => setActiveCertificate(null)}
               className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-neutral-900/80 text-white hover:bg-brand-pink flex items-center justify-center transition-colors shadow-lg"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2.5}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
 
@@ -447,8 +495,12 @@ function OfficialCertificatesShowcase() {
                 />
               ) : (
                 <div className="text-white text-center p-8">
-                  <h4 className="text-2xl font-bold mb-2">{activeCertificate.title}</h4>
-                  <p className="text-neutral-400">{activeCertificate.subtitle || activeCertificate.category}</p>
+                  <h4 className="text-2xl font-bold mb-2">
+                    {activeCertificate.title}
+                  </h4>
+                  <p className="text-neutral-400">
+                    {activeCertificate.subtitle || activeCertificate.category}
+                  </p>
                 </div>
               )}
             </div>
@@ -472,23 +524,36 @@ function OfficialCertificatesShowcase() {
                 <div className="space-y-4 border-t border-b border-neutral-100 py-6 mb-6 text-sm">
                   {activeCertificate.certNumber && (
                     <div>
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 block">Certificate Number</span>
-                      <p className="font-mono font-bold text-neutral-800">{activeCertificate.certNumber}</p>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 block">
+                        Certificate Number
+                      </span>
+                      <p className="font-mono font-bold text-neutral-800">
+                        {activeCertificate.certNumber}
+                      </p>
                     </div>
                   )}
 
-                  {(activeCertificate.issueDate || activeCertificate.expiryDate) && (
+                  {(activeCertificate.issueDate ||
+                    activeCertificate.expiryDate) && (
                     <div className="grid grid-cols-2 gap-4">
                       {activeCertificate.issueDate && (
                         <div>
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 block">Issued On</span>
-                          <p className="font-semibold text-neutral-800">{activeCertificate.issueDate}</p>
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 block">
+                            Issued On
+                          </span>
+                          <p className="font-semibold text-neutral-800">
+                            {activeCertificate.issueDate}
+                          </p>
                         </div>
                       )}
                       {activeCertificate.expiryDate && (
                         <div>
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 block">Valid Until</span>
-                          <p className="font-semibold text-neutral-800">{activeCertificate.expiryDate}</p>
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 block">
+                            Valid Until
+                          </span>
+                          <p className="font-semibold text-neutral-800">
+                            {activeCertificate.expiryDate}
+                          </p>
                         </div>
                       )}
                     </div>
@@ -496,23 +561,37 @@ function OfficialCertificatesShowcase() {
 
                   {activeCertificate.issuer && (
                     <div>
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 block">Certification Body</span>
-                      <p className="text-xs font-semibold text-neutral-700">{activeCertificate.issuer}</p>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 block">
+                        Certification Body
+                      </span>
+                      <p className="text-xs font-semibold text-neutral-700">
+                        {activeCertificate.issuer}
+                      </p>
                     </div>
                   )}
 
                   {activeCertificate.accreditation && (
                     <div>
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 block">Accreditation</span>
-                      <p className="text-xs font-bold text-brand-pink">{activeCertificate.accreditation}</p>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 block">
+                        Accreditation
+                      </span>
+                      <p className="text-xs font-bold text-brand-pink">
+                        {activeCertificate.accreditation}
+                      </p>
                     </div>
                   )}
 
-                  {(activeCertificate.scope || activeCertificate.desc || activeCertificate.description) && (
+                  {(activeCertificate.scope ||
+                    activeCertificate.desc ||
+                    activeCertificate.description) && (
                     <div>
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 block">Scope of Registration</span>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 block">
+                        Scope of Registration
+                      </span>
                       <p className="text-xs text-neutral-600 leading-relaxed mt-1">
-                        {activeCertificate.scope || activeCertificate.desc || activeCertificate.description}
+                        {activeCertificate.scope ||
+                          activeCertificate.desc ||
+                          activeCertificate.description}
                       </p>
                     </div>
                   )}
@@ -527,8 +606,19 @@ function OfficialCertificatesShowcase() {
                   download
                   className="w-full py-3.5 px-4 bg-brand-pink text-white text-xs font-bold tracking-wider uppercase rounded-2xl hover:bg-[#a0004f] transition-colors flex items-center justify-center gap-2 shadow-lg shadow-brand-pink/20"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-4 h-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                    />
                   </svg>
                   Open Full Resolution
                 </a>
@@ -700,9 +790,7 @@ function IndustryMemberships() {
             </h2>
           )}
           {description && (
-            <p className="text-neutral-600 max-w-2xl mx-auto">
-              {description}
-            </p>
+            <p className="text-neutral-600 max-w-2xl mx-auto">{description}</p>
           )}
         </motion.div>
       </div>
@@ -781,7 +869,8 @@ function TrustStats() {
       ? data.statsList
       : null;
 
-  let stats: Array<{ value: number | string; suffix: string; label: string }> = [];
+  let stats: Array<{ value: number | string; suffix: string; label: string }> =
+    [];
 
   if (rawStats && rawStats.length > 0) {
     stats = rawStats.map((s: any) => {
@@ -824,7 +913,9 @@ function TrustStats() {
       <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-10 relative z-10">
-        <div className={`grid grid-cols-2 md:grid-cols-${stats.length} gap-12 md:gap-8 divide-x divide-white/10`}>
+        <div
+          className={`grid grid-cols-2 md:grid-cols-${stats.length} gap-12 md:gap-8 divide-x divide-white/10`}
+        >
           {stats.map((stat, i) => (
             <div
               key={i}
