@@ -87,6 +87,17 @@ export function Footer({
         </div>
         <div>© 2026 Encotec Energy (India) Pvt. Ltd.</div>
       </div>
+      <div className="mt-2 text-right text-[8px] text-neutral-400">
+        Designed and Developed by{" "}
+        <a
+          href="http://transverse.in"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:underline hover:text-neutral-600 transition-colors"
+        >
+          Transverse Solutions
+        </a>
+      </div>
     </>
   );
 
