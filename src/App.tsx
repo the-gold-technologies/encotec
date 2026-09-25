@@ -1,24 +1,25 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { useCMSStore } from './store/useCMSStore';
-import { Home } from './pages/Home';
-import { About } from './pages/About';
-import { Services } from './pages/Services';
-import { EngineeringServices } from './pages/services/EngineeringServices';
-import { ProjectManagement } from './pages/services/ProjectManagement';
-import { PowerGeneration } from './pages/services/PowerGeneration';
-import { TransmissionDistribution } from './pages/services/TransmissionDistribution';
-import { RenewableEnergy } from './pages/services/RenewableEnergy';
-import { AirportServices } from './pages/services/AirportServices';
-import { ValueAddedServices } from './pages/services/ValueAddedServices';
-import { Insights } from './pages/Insights';
-import { InsightDetail } from './pages/insights/InsightDetail';
-import { Contact } from './pages/Contact';
-import { Careers } from './pages/Careers';
-import { Certifications } from './pages/Certifications';
-import { Leadership } from './pages/Leadership';
-import { PrivacyPolicy } from './pages/PrivacyPolicy';
-import { CookiePolicy } from './pages/CookiePolicy';
+import React, { useEffect } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useCMSStore } from "./store/useCMSStore";
+import { Home } from "./pages/Home";
+import { About } from "./pages/About";
+import { Services } from "./pages/Services";
+import { EngineeringServices } from "./pages/services/EngineeringServices";
+import { ProjectManagement } from "./pages/services/ProjectManagement";
+import { PowerGeneration } from "./pages/services/PowerGeneration";
+import { TransmissionDistribution } from "./pages/services/TransmissionDistribution";
+import { RenewableEnergy } from "./pages/services/RenewableEnergy";
+import { AirportServices } from "./pages/services/AirportServices";
+import { ValueAddedServices } from "./pages/services/ValueAddedServices";
+import { Insights } from "./pages/Insights";
+import { InsightDetail } from "./pages/insights/InsightDetail";
+import { Contact } from "./pages/Contact";
+import { Careers } from "./pages/Careers";
+import { Certifications } from "./pages/Certifications";
+import { Leadership } from "./pages/Leadership";
+import { PrivacyPolicy } from "./pages/PrivacyPolicy";
+import { CookiePolicy } from "./pages/CookiePolicy";
+import { ScrollToTop } from "./components/ScrollToTop";
 
 export function App() {
   const fetchGlobalSEO = useCMSStore((state) => state.fetchGlobalSEO);
@@ -46,13 +47,15 @@ export function App() {
 
     // 2. Apply Google Site Verification
     if (globalSEO.searchConsoleId) {
-      let metaVerification = document.querySelector('meta[name="google-site-verification"]');
+      let metaVerification = document.querySelector(
+        'meta[name="google-site-verification"]',
+      );
       if (!metaVerification) {
-        metaVerification = document.createElement('meta');
-        metaVerification.setAttribute('name', 'google-site-verification');
+        metaVerification = document.createElement("meta");
+        metaVerification.setAttribute("name", "google-site-verification");
         document.head.appendChild(metaVerification);
       }
-      metaVerification.setAttribute('content', globalSEO.searchConsoleId);
+      metaVerification.setAttribute("content", globalSEO.searchConsoleId);
     }
 
     // 3. Apply Google Analytics (GA4)
@@ -146,10 +149,10 @@ export function App() {
     } else if (globalSchemaScript) {
       globalSchemaScript.remove();
     }
-
   }, [globalSEO]);
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
@@ -157,24 +160,29 @@ export function App() {
         <Route path="/services/engineering" element={<EngineeringServices />} />
         <Route
           path="/services/project-management"
-          element={<ProjectManagement />} />
-        
+          element={<ProjectManagement />}
+        />
+
         <Route
           path="/services/power-generation"
-          element={<PowerGeneration />} />
-        
+          element={<PowerGeneration />}
+        />
+
         <Route
           path="/services/transmission-distribution"
-          element={<TransmissionDistribution />} />
-        
+          element={<TransmissionDistribution />}
+        />
+
         <Route
           path="/services/renewable-energy"
-          element={<RenewableEnergy />} />
-        
+          element={<RenewableEnergy />}
+        />
+
         <Route
           path="/services/airport-services"
-          element={<AirportServices />} />
-        
+          element={<AirportServices />}
+        />
+
         <Route path="/services/value-added" element={<ValueAddedServices />} />
         <Route path="/insights" element={<Insights />} />
         <Route path="/insights/:slug" element={<InsightDetail />} />
@@ -187,6 +195,6 @@ export function App() {
         <Route path="/cookies" element={<CookiePolicy />} />
         <Route path="/cookie-policy" element={<CookiePolicy />} />
       </Routes>
-    </BrowserRouter>);
-
+    </BrowserRouter>
+  );
 }

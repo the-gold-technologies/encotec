@@ -20,20 +20,20 @@ export function Hero() {
 
   const serviceTags = data.serviceTags || [];
   const heroStats = (
-    (Array.isArray(data.stats) && data.stats.length > 0)
+    Array.isArray(data.stats) && data.stats.length > 0
       ? data.stats
-      : (Array.isArray(data.statsList) && data.statsList.length > 0)
-      ? data.statsList
-      : [
-          { value: data.stat1Value, label: data.stat1Label },
-          { value: data.stat2Value, label: data.stat2Label },
-          { value: data.stat3Value, label: data.stat3Label },
-          { value: data.stat4Value, label: data.stat4Label },
-          { value: data.stat5Value, label: data.stat5Label },
-          { value: data.stat6Value, label: data.stat6Label },
-          { value: data.stat7Value, label: data.stat7Label },
-          { value: data.stat8Value, label: data.stat8Label },
-        ]
+      : Array.isArray(data.statsList) && data.statsList.length > 0
+        ? data.statsList
+        : [
+            { value: data.stat1Value, label: data.stat1Label },
+            { value: data.stat2Value, label: data.stat2Label },
+            { value: data.stat3Value, label: data.stat3Label },
+            { value: data.stat4Value, label: data.stat4Label },
+            { value: data.stat5Value, label: data.stat5Label },
+            { value: data.stat6Value, label: data.stat6Label },
+            { value: data.stat7Value, label: data.stat7Label },
+            { value: data.stat8Value, label: data.stat8Label },
+          ]
   ).filter((s: any) => s && s.value && s.label);
 
   return (
@@ -179,12 +179,10 @@ export function Hero() {
               initial={{
                 opacity: 0,
                 scale: 0.95,
-                rotate: 0,
               }}
               animate={{
                 opacity: 1,
                 scale: 1,
-                rotate: 3,
               }}
               transition={{
                 duration: 1,
@@ -194,12 +192,7 @@ export function Hero() {
               className="relative"
             >
               {/* Main Image */}
-              <div
-                className="relative overflow-hidden shadow-2xl shadow-black/20"
-                style={{
-                  transform: "rotate(3deg)",
-                }}
-              >
+              <div className="relative overflow-hidden shadow-2xl shadow-black/20">
                 <img
                   src={data.backgroundImage}
                   alt="Wind turbines at sunset"
