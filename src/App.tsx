@@ -32,17 +32,35 @@ export function App() {
   useEffect(() => {
     if (!globalSEO) return;
 
-    // 1. Apply Favicon
-    let faviconLink = document.querySelector("link[rel*='icon']");
-    if (globalSEO.favicon) {
-      if (!faviconLink) {
-        faviconLink = document.createElement("link");
-        faviconLink.setAttribute("rel", "shortcut icon");
-        document.head.appendChild(faviconLink);
-      }
-      faviconLink.setAttribute("href", globalSEO.favicon);
-    } else if (faviconLink) {
-      faviconLink.remove();
+    // 1. Apply Favicon (with public/febIcon.png fallback)
+    const publicFavicon = "/febIcon.png";
+    const applyFavicon = (href: string) => {
+      document.querySelectorAll("link[rel*='icon']").forEach((el) => el.remove());
+
+      const faviconLink = document.createElement("link");
+      faviconLink.rel = "icon";
+      faviconLink.type = "image/png";
+      faviconLink.href = href;
+      document.head.appendChild(faviconLink);
+
+      const appleTouchLink = document.createElement("link");
+      appleTouchLink.rel = "apple-touch-icon";
+      appleTouchLink.href = href;
+      document.head.appendChild(appleTouchLink);
+    };
+
+    if (globalSEO.favicon && globalSEO.favicon.trim() !== "") {
+      const img = new Image();
+      img.onload = () => {
+        applyFavicon(globalSEO.favicon!);
+      };
+      img.onerror = () => {
+        console.warn("CMS Favicon URL failed to load. Falling back to public /febIcon.png");
+        applyFavicon(publicFavicon);
+      };
+      img.src = globalSEO.favicon;
+    } else {
+      applyFavicon(publicFavicon);
     }
 
     // 2. Apply Google Site Verification

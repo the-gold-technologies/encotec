@@ -41,7 +41,14 @@ function getSlugFromPath(urlPath: string): string {
     return "service/renewable-energy";
   if (cleanPath === "/services/airport-services")
     return "service/airport-services";
-  if (cleanPath === "/services/value-added") return "service/value-added";
+  if (cleanPath === "/privacy" || cleanPath === "/privacy-policy") return "privacy-policy";
+  if (cleanPath === "/cookies" || cleanPath === "/cookie-policy") return "cookie-policy";
+
+  // Dynamic blog / insights
+  if (cleanPath.startsWith("/insights/")) {
+    const blogSlug = cleanPath.replace(/^\/insights\//, "").split("/")[0].trim();
+    if (blogSlug) return `insight-${blogSlug}`;
+  }
 
   return "";
 }
@@ -151,9 +158,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     headInjections += `    <meta name="google-site-verification" content="${globalSEO.searchConsoleId}" />\n`;
   }
 
-  if (globalSEO.favicon) {
-    headInjections += `    <link rel="shortcut icon" href="${globalSEO.favicon}" />\n`;
-  }
+  const favicon = globalSEO.favicon || "/febIcon.png";
+  headInjections += `    <link rel="icon" href="${favicon}" />\n`;
+  headInjections += `    <link rel="apple-touch-icon" href="${favicon}" />\n`;
 
   const ogTitle = pageSEO?.ogTitle || title;
   headInjections += `    <meta property="og:title" content="${ogTitle}" />\n`;
@@ -207,6 +214,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   let html = template;
   html = html.replace(/<title>[^]*?<\/title>/gi, "");
+  if (globalSEO.favicon) {
+    html = html.replace(/<link[^>]*rel=["'](icon|apple-touch-icon|shortcut icon)["'][^>]*>\s*/gi, "");
+  }
   html = html.replace(/<head>/i, `<head>${headInjections}`);
 
   if (bodyInjections) {
