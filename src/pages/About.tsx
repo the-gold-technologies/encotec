@@ -294,7 +294,7 @@ function MissionVisionValues() {
           </p>
         </motion.div>
 
-        {/* Mission & Vision */}
+        {/* Vision & Mission */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
           <motion.div
             initial={{
@@ -314,9 +314,9 @@ function MissionVisionValues() {
             className="p-10 bg-white border-l-4 border-brand-pink"
           >
             <h3 className="text-2xl font-black text-neutral-900 mb-4 uppercase tracking-tight">
-              {data.missionTitle}
+              {data.visionTitle}
             </h3>
-            <p className="text-neutral-700 leading-relaxed">{missionText}</p>
+            <p className="text-neutral-700 leading-relaxed">{visionText}</p>
           </motion.div>
 
           <motion.div
@@ -337,9 +337,9 @@ function MissionVisionValues() {
             className="p-10 bg-white border-l-4 border-brand-pink"
           >
             <h3 className="text-2xl font-black text-neutral-900 mb-4 uppercase tracking-tight">
-              {data.visionTitle}
+              {data.missionTitle}
             </h3>
-            <p className="text-neutral-700 leading-relaxed">{visionText}</p>
+            <p className="text-neutral-700 leading-relaxed">{missionText}</p>
           </motion.div>
         </div>
 

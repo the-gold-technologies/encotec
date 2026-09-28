@@ -25,6 +25,8 @@ import {
   SearchIcon,
   UsersIcon,
   FileTextIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
 } from "lucide-react";
 import { useSectionData } from "../store/useCMSStore";
 import { useSEO } from "../hooks/useSEO";
@@ -438,6 +440,11 @@ function OpenPositionsSection({ onApply }: { onApply: (job: any) => void }) {
   }));
 
   const [activeFilter, setActiveFilter] = useState("All");
+  const [expandedJobId, setExpandedJobId] = useState<any>(null);
+
+  const toggleJob = (id: any) => {
+    setExpandedJobId((prev: any) => (prev === id ? null : id));
+  };
 
   /*
    * Dynamically extract departments
@@ -556,196 +563,209 @@ function OpenPositionsSection({ onApply }: { onApply: (job: any) => void }) {
 
         <motion.div layout className="space-y-4">
           <AnimatePresence mode="popLayout">
-            {filteredJobs.map((job: any, index: number) => (
-              <motion.div
-                key={job.id || index}
-                layout
-                initial={{
-                  opacity: 0,
-                  y: 20,
-                }}
-                animate={{
-                  opacity: 1,
-                  y: 0,
-                }}
-                exit={{
-                  opacity: 0,
-                  scale: 0.95,
-                  transition: {
-                    duration: 0.2,
-                  },
-                }}
-                transition={{
-                  duration: 0.4,
-                  delay: index * 0.05,
-                }}
-                whileHover={{
-                  y: -4,
-                }}
-                className="group p-8 bg-white border border-neutral-200 hover:border-brand-pink/50 hover:shadow-lg transition-all duration-300 flex flex-col md:flex-row md:items-start justify-between gap-6"
-              >
-                {/* ================================================== */}
-                {/* JOB INFORMATION */}
-                {/* ================================================== */}
+            {filteredJobs.map((job: any, index: number) => {
+              const jobId = job.id || index;
+              const isExpanded = expandedJobId === jobId;
 
-                <div className="flex-grow min-w-0">
-                  {/* Meta information */}
-                  <div className="flex flex-wrap items-center gap-3 mb-3">
-                    {/* Department */}
-                    {job.dept && (
-                      <span
-                        className={`px-3 py-1 text-[10px] font-bold uppercase tracking-wider ${getDeptColor(
-                          job.dept,
-                        )}`}
+              return (
+                <motion.div
+                  key={jobId}
+                  layout
+                  initial={{
+                    opacity: 0,
+                    y: 20,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                  }}
+                  exit={{
+                    opacity: 0,
+                    scale: 0.95,
+                    transition: {
+                      duration: 0.2,
+                    },
+                  }}
+                  transition={{
+                    duration: 0.3,
+                  }}
+                  className={`group p-6 md:p-8 bg-white border transition-all duration-300 ${
+                    isExpanded
+                      ? "border-brand-pink shadow-lg"
+                      : "border-neutral-200 hover:border-brand-pink/50 hover:shadow-md"
+                  }`}
+                >
+                  {/* Job Header Row (Clickable to expand/collapse) */}
+                  <div
+                    onClick={() => toggleJob(jobId)}
+                    className="flex flex-col md:flex-row md:items-center justify-between gap-6 cursor-pointer"
+                  >
+                    {/* Meta & Title */}
+                    <div className="flex-grow min-w-0">
+                      <div className="flex flex-wrap items-center gap-3 mb-2.5">
+                        {job.dept && (
+                          <span
+                            className={`px-3 py-1 text-[10px] font-bold uppercase tracking-wider ${getDeptColor(
+                              job.dept,
+                            )}`}
+                          >
+                            {job.dept}
+                          </span>
+                        )}
+
+                        {job.location && (
+                          <span className="flex items-center gap-1.5 text-xs font-medium text-neutral-500">
+                            <MapPinIcon size={14} />
+                            {job.location}
+                          </span>
+                        )}
+
+                        {job.type && (
+                          <span className="flex items-center gap-1.5 text-xs font-medium text-neutral-500">
+                            <BriefcaseIcon size={14} />
+                            {job.type}
+                          </span>
+                        )}
+                      </div>
+
+                      <h3 className="text-xl md:text-2xl font-black text-neutral-900 group-hover:text-brand-pink transition-colors">
+                        {job.title}
+                      </h3>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex items-center gap-3 flex-shrink-0">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleJob(jobId);
+                        }}
+                        className="inline-flex items-center gap-1.5 px-4 py-2.5 border border-neutral-200 text-neutral-700 text-xs font-bold tracking-wider uppercase hover:border-brand-pink hover:text-brand-pink transition-colors cursor-pointer"
                       >
-                        {job.dept}
-                      </span>
-                    )}
+                        <span>
+                          {isExpanded ? "Hide Details" : "View Details"}
+                        </span>
+                        {isExpanded ? (
+                          <ChevronUpIcon size={15} />
+                        ) : (
+                          <ChevronDownIcon size={15} />
+                        )}
+                      </button>
 
-                    {/* Location */}
-                    {job.location && (
-                      <span className="flex items-center gap-1.5 text-xs font-medium text-neutral-500">
-                        <MapPinIcon size={14} />
-                        {job.location}
-                      </span>
-                    )}
-
-                    {/* Employment type */}
-                    {job.type && (
-                      <span className="flex items-center gap-1.5 text-xs font-medium text-neutral-500">
-                        <BriefcaseIcon size={14} />
-                        {job.type}
-                      </span>
-                    )}
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onApply(job);
+                        }}
+                        className="inline-flex items-center gap-2 px-6 py-2.5 bg-neutral-900 text-white text-xs font-bold tracking-wider uppercase hover:bg-brand-pink transition-colors duration-300 cursor-pointer"
+                      >
+                        Apply Now
+                        <ArrowRightIcon size={14} />
+                      </button>
+                    </div>
                   </div>
 
-                  {/* ================================================== */}
-                  {/* TITLE */}
-                  {/* ================================================== */}
-
-                  <h3 className="text-2xl font-black text-neutral-900 mb-5 group-hover:text-brand-pink transition-colors">
-                    {job.title}
-                  </h3>
-
-                  {/* ================================================== */}
-                  {/* COMPLETE JOB DESCRIPTION */}
-                  {/* ================================================== */}
-
-                  {Array.isArray(job.desc) && job.desc.length > 0 && (
-                    <div className="text-neutral-600 space-y-5">
-                      {job.desc.map((block: any, blockIndex: number) => {
-                        /* ----------------------------- */
-                        /* PARAGRAPH */
-                        /* ----------------------------- */
-
-                        if (block.type === "paragraph") {
-                          return (
-                            <p key={blockIndex} className="leading-relaxed">
-                              {block.text}
-                            </p>
-                          );
-                        }
-
-                        /* ----------------------------- */
-                        /* HEADING */
-                        /* ----------------------------- */
-
-                        if (block.type === "heading") {
-                          return (
-                            <h4
-                              key={blockIndex}
-                              className="text-lg font-bold text-neutral-900 pt-2"
-                            >
-                              {block.text}
-                            </h4>
-                          );
-                        }
-
-                        /* ----------------------------- */
-                        /* QUOTE */
-                        /* ----------------------------- */
-
-                        if (block.type === "quote") {
-                          return (
-                            <blockquote
-                              key={blockIndex}
-                              className="border-l-4 border-brand-pink pl-4 italic text-neutral-700"
-                            >
-                              {block.text}
-                            </blockquote>
-                          );
-                        }
-
-                        /* ----------------------------- */
-                        /* LIST */
-                        /* ----------------------------- */
-
-                        if (
-                          block.type === "list" &&
-                          Array.isArray(block.items)
-                        ) {
-                          return (
-                            <ul
-                              key={blockIndex}
-                              className="list-disc pl-6 space-y-2"
-                            >
-                              {block.items.map(
-                                (item: string, itemIndex: number) => (
-                                  <li
-                                    key={itemIndex}
+                  {/* Expandable Description */}
+                  <AnimatePresence>
+                    {isExpanded &&
+                      Array.isArray(job.desc) &&
+                      job.desc.length > 0 && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.35, ease: "easeInOut" }}
+                          className="overflow-hidden pt-6 mt-6 border-t border-neutral-100"
+                        >
+                          <div className="text-neutral-600 space-y-5">
+                            {job.desc.map((block: any, blockIndex: number) => {
+                              if (block.type === "paragraph") {
+                                return (
+                                  <p
+                                    key={blockIndex}
                                     className="leading-relaxed"
                                   >
-                                    {item}
-                                  </li>
-                                ),
-                              )}
-                            </ul>
-                          );
-                        }
+                                    {block.text}
+                                  </p>
+                                );
+                              }
 
-                        /* ----------------------------- */
-                        /* IMAGE */
-                        /* ----------------------------- */
+                              if (block.type === "heading") {
+                                return (
+                                  <h4
+                                    key={blockIndex}
+                                    className="text-lg font-bold text-neutral-900 pt-2"
+                                  >
+                                    {block.text}
+                                  </h4>
+                                );
+                              }
 
-                        if (
-                          block.type === "image" &&
-                          (block.image || block.url || block.text)
-                        ) {
-                          return (
-                            <div
-                              key={blockIndex}
-                              className="my-4 overflow-hidden rounded-xl border border-neutral-200"
-                            >
-                              <img
-                                src={block.image || block.url || block.text}
-                                alt={block.alt || "Job description"}
-                                className="max-w-full h-auto"
-                              />
-                            </div>
-                          );
-                        }
+                              if (block.type === "quote") {
+                                return (
+                                  <blockquote
+                                    key={blockIndex}
+                                    className="border-l-4 border-brand-pink pl-4 italic text-neutral-700"
+                                  >
+                                    {block.text}
+                                  </blockquote>
+                                );
+                              }
 
-                        return null;
-                      })}
-                    </div>
-                  )}
-                </div>
+                              if (
+                                block.type === "list" &&
+                                Array.isArray(block.items)
+                              ) {
+                                return (
+                                  <ul
+                                    key={blockIndex}
+                                    className="list-disc pl-6 space-y-2"
+                                  >
+                                    {block.items.map(
+                                      (item: string, itemIndex: number) => (
+                                        <li
+                                          key={itemIndex}
+                                          className="leading-relaxed"
+                                        >
+                                          {item}
+                                        </li>
+                                      ),
+                                    )}
+                                  </ul>
+                                );
+                              }
 
-                {/* ================================================== */}
-                {/* APPLY BUTTON */}
-                {/* ================================================== */}
+                              if (
+                                block.type === "image" &&
+                                (block.image || block.url || block.text)
+                              ) {
+                                return (
+                                  <div
+                                    key={blockIndex}
+                                    className="my-4 overflow-hidden rounded-xl border border-neutral-200"
+                                  >
+                                    <img
+                                      src={
+                                        block.image || block.url || block.text
+                                      }
+                                      alt={block.alt || "Job description"}
+                                      className="max-w-full h-auto"
+                                    />
+                                  </div>
+                                );
+                              }
 
-                <div className="flex-shrink-0 md:pt-1">
-                  <button
-                    onClick={() => onApply(job)}
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-neutral-900 text-white text-sm font-bold tracking-wider uppercase hover:bg-brand-pink transition-colors duration-300 cursor-pointer"
-                  >
-                    Apply Now
-                    <ArrowRightIcon size={16} />
-                  </button>
-                </div>
-              </motion.div>
-            ))}
+                              return null;
+                            })}
+                          </div>
+                        </motion.div>
+                      )}
+                  </AnimatePresence>
+                </motion.div>
+              );
+            })}
           </AnimatePresence>
         </motion.div>
 

@@ -29,19 +29,36 @@ export function Process() {
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
+  const isProgrammaticScrollRef = useRef(false);
+  const scrollTimeoutRef = useRef<any>(null);
 
   const updateScrollState = () => {
-    if (!scrollRef.current) return;
-    const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-    setCanScrollLeft(scrollLeft > 10);
-    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
-    // Calculate active index based on scroll position
-    const cardWidth = 360;
-    const gap = 24;
-    const newIndex = Math.round(scrollLeft / (cardWidth + gap));
-    setActiveIndex(Math.min(newIndex, steps.length - 1));
+    if (
+      !scrollRef.current ||
+      steps.length === 0 ||
+      isProgrammaticScrollRef.current
+    )
+      return;
+    const container = scrollRef.current;
+    const containerCenter = container.scrollLeft + container.clientWidth / 2;
+
+    let closestIndex = 0;
+    let minDistance = Infinity;
+
+    for (let i = 0; i < steps.length; i++) {
+      const card = container.children[i] as HTMLElement;
+      if (card) {
+        const cardCenter =
+          card.offsetLeft - container.offsetLeft + card.offsetWidth / 2;
+        const distance = Math.abs(containerCenter - cardCenter);
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestIndex = i;
+        }
+      }
+    }
+
+    setActiveIndex(closestIndex);
   };
 
   useEffect(() => {
@@ -50,30 +67,50 @@ export function Process() {
     el.addEventListener("scroll", updateScrollState, {
       passive: true,
     });
-    updateScrollState();
-    return () => el.removeEventListener("scroll", updateScrollState);
+    window.addEventListener("resize", updateScrollState);
+    return () => {
+      el.removeEventListener("scroll", updateScrollState);
+      window.removeEventListener("resize", updateScrollState);
+      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+    };
   }, [steps.length]);
 
-  const scroll = (direction: "left" | "right") => {
-    if (!scrollRef.current) return;
-    const cardWidth = 360;
-    const gap = 24;
-    const amount = direction === "left" ? -(cardWidth + gap) : cardWidth + gap;
-    scrollRef.current.scrollBy({
-      left: amount,
-      behavior: "smooth",
-    });
+  const scrollToIndex = (index: number) => {
+    if (!scrollRef.current || steps.length === 0) return;
+    const clampedIndex = Math.max(0, Math.min(index, steps.length - 1));
+    setActiveIndex(clampedIndex);
+
+    isProgrammaticScrollRef.current = true;
+    if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+    scrollTimeoutRef.current = setTimeout(() => {
+      isProgrammaticScrollRef.current = false;
+    }, 600);
+
+    const targetCard = scrollRef.current.children[clampedIndex] as HTMLElement;
+    if (targetCard) {
+      const container = scrollRef.current;
+      const targetLeft =
+        targetCard.offsetLeft -
+        container.offsetLeft -
+        (container.clientWidth - targetCard.offsetWidth) / 2;
+
+      container.scrollTo({
+        left: Math.max(0, targetLeft),
+        behavior: "smooth",
+      });
+    }
   };
 
-  const scrollToIndex = (index: number) => {
-    if (!scrollRef.current) return;
-    const cardWidth = 360;
-    const gap = 24;
-    scrollRef.current.scrollTo({
-      left: index * (cardWidth + gap),
-      behavior: "smooth",
-    });
+  const scroll = (direction: "left" | "right") => {
+    if (direction === "left") {
+      scrollToIndex(Math.max(0, activeIndex - 1));
+    } else {
+      scrollToIndex(Math.min(steps.length - 1, activeIndex + 1));
+    }
   };
+
+  const progressPercentage =
+    steps.length > 1 ? (activeIndex / (steps.length - 1)) * 100 : 100;
 
   return (
     <section className="py-32 bg-white relative overflow-hidden">
@@ -123,15 +160,15 @@ export function Process() {
           >
             <button
               onClick={() => scroll("left")}
-              disabled={!canScrollLeft}
-              className="w-12 h-12 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-600 hover:border-brand-pink hover:text-brand-pink disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-300"
+              disabled={activeIndex === 0}
+              className="w-12 h-12 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-600 hover:border-brand-pink hover:text-brand-pink disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-300 cursor-pointer"
             >
               <ChevronLeftIcon size={20} />
             </button>
             <button
               onClick={() => scroll("right")}
-              disabled={!canScrollRight}
-              className="w-12 h-12 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-600 hover:border-brand-pink hover:text-brand-pink disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-300"
+              disabled={activeIndex >= steps.length - 1}
+              className="w-12 h-12 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-600 hover:border-brand-pink hover:text-brand-pink disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-300 cursor-pointer"
             >
               <ChevronRightIcon size={20} />
             </button>
@@ -144,13 +181,13 @@ export function Process() {
           <motion.div
             className="absolute top-0 left-0 h-px bg-gradient-brand origin-left"
             style={{
-              width: `${((activeIndex + 1) / steps.length) * 100}%`,
+              width: `${progressPercentage}%`,
             }}
             initial={{
               width: "0%",
             }}
             animate={{
-              width: `${((activeIndex + 1) / steps.length) * 100}%`,
+              width: `${progressPercentage}%`,
             }}
             transition={{
               duration: 0.4,
@@ -164,14 +201,14 @@ export function Process() {
               <button
                 key={i}
                 onClick={() => scrollToIndex(i)}
-                className="relative group"
+                className="relative group cursor-pointer"
               >
                 <div
                   className={`w-3 h-3 rounded-full border-2 transition-all duration-300 ${i <= activeIndex ? "bg-brand-pink border-brand-pink scale-125" : "bg-white border-neutral-300 hover:border-brand-pink/50"}`}
                 />
 
                 <span
-                  className={`absolute top-5 left-1/2 -translate-x-1/2 text-[10px] font-bold tracking-wider uppercase whitespace-nowrap transition-colors duration-300 ${i <= activeIndex ? "text-brand-pink" : "text-neutral-400"}`}
+                  className={`absolute top-5 left-1/2 -translate-x-1/2 text-[10px] font-bold tracking-wider uppercase whitespace-nowrap transition-colors duration-300 ${i <= activeIndex ? "text-brand-pink font-extrabold" : "text-neutral-400"}`}
                 >
                   0{step.id || i + 1}
                 </span>
@@ -183,10 +220,10 @@ export function Process() {
         {/* Horizontal Carousel */}
         <div className="relative mt-14">
           {/* Fade edges */}
-          {canScrollLeft && (
+          {activeIndex > 0 && (
             <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
           )}
-          {canScrollRight && (
+          {activeIndex < steps.length - 1 && (
             <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
           )}
 
@@ -222,6 +259,7 @@ export function Process() {
                 }}
               >
                 <div
+                  onClick={() => scrollToIndex(index)}
                   className={`h-full p-8 rounded-2xl border transition-all duration-500 group cursor-pointer ${index === activeIndex ? "bg-neutral-900 border-brand-pink/30 shadow-2xl shadow-brand-pink/10" : "bg-neutral-50 border-neutral-100 hover:border-brand-pink/20 hover:shadow-lg"}`}
                 >
                   {/* Step Number */}
@@ -261,7 +299,7 @@ export function Process() {
             ))}
 
             {/* Spacer at end for scroll padding */}
-            <div className="flex-shrink-0 w-4" />
+            <div className="flex-shrink-0 w-[40vw] max-w-[500px]" />
           </div>
         </div>
       </div>
