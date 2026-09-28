@@ -213,7 +213,7 @@ export const useCMSStore = create<CMSState>((set, get) => ({
         globalSEO: {
           siteTitle: "encotec",
           siteDescription:
-            "Engineering & Project Management Services - Member of Dornier Group",
+            "Engineering & Project Management Services",
           favicon: null,
           googleAnalyticsId: "G-CT894VPLS1",
           gtmId: "GTM-59DCSVDV",

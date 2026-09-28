@@ -27,8 +27,11 @@ export function StartProjectModal({ isOpen, onClose }: StartProjectModalProps) {
     submitButtonLabel: "Send Message",
   });
 
+  const [selectedService, setSelectedService] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+  const [submitStatus, setSubmitStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -65,12 +68,28 @@ export function StartProjectModal({ isOpen, onClose }: StartProjectModalProps) {
     setSubmitStatus("idle");
 
     const form = e.currentTarget;
-    const fullName = (form.querySelector("#modal-fullName") as HTMLInputElement).value;
-    const email = (form.querySelector("#modal-email") as HTMLInputElement).value;
-    const phone = (form.querySelector("#modal-phone") as HTMLInputElement).value;
-    const company = (form.querySelector("#modal-company") as HTMLInputElement).value;
-    const subject = (form.querySelector("#modal-subject") as HTMLSelectElement).value;
-    const message = (form.querySelector("#modal-message") as HTMLTextAreaElement).value;
+    const fullName = (form.querySelector("#modal-fullName") as HTMLInputElement)
+      .value;
+    const email = (form.querySelector("#modal-email") as HTMLInputElement)
+      .value;
+    const phone = (form.querySelector("#modal-phone") as HTMLInputElement)
+      .value;
+    const company = (form.querySelector("#modal-company") as HTMLInputElement)
+      .value;
+    const location =
+      (form.querySelector("#modal-location") as HTMLInputElement)?.value || "";
+    const subject = (form.querySelector("#modal-subject") as HTMLSelectElement)
+      .value;
+    const otherService = (
+      form.querySelector("#modal-other-service") as HTMLInputElement
+    )?.value;
+    const finalSubject =
+      subject === "Other / Not sure" && otherService
+        ? `Other / Not sure: ${otherService.trim()}`
+        : subject;
+    const message = (
+      form.querySelector("#modal-message") as HTMLTextAreaElement
+    ).value;
 
     const API_BASE_URL = import.meta.env.VITE_CMS_API_URL || "";
 
@@ -83,9 +102,12 @@ export function StartProjectModal({ isOpen, onClose }: StartProjectModalProps) {
         body: JSON.stringify({
           name: fullName,
           email: email,
-          interestedIn: subject,
+          interestedIn: finalSubject,
           budget: company,
-          projectGoals: `Phone: ${phone || "N/A"}\nCompany: ${company || "N/A"}\nMessage:\n${message}`,
+          phone: phone,
+          companyName: company,
+          location: location,
+          projectGoals: `Phone: ${phone || "N/A"}\nCompany: ${company || "N/A"}\nLocation: ${location || "N/A"}\nService Required: ${finalSubject}\nMessage:\n${message}`,
         }),
       });
 
@@ -94,6 +116,7 @@ export function StartProjectModal({ isOpen, onClose }: StartProjectModalProps) {
       }
 
       setSubmitStatus("success");
+      setSelectedService("");
       form.reset();
     } catch (err) {
       console.error("Enquiry submit error:", err);
@@ -177,7 +200,9 @@ export function StartProjectModal({ isOpen, onClose }: StartProjectModalProps) {
                       id="modal-email"
                       required
                       className="w-full px-6 py-4 bg-neutral-50 border border-neutral-200 focus:outline-none focus:border-brand-pink focus:ring-1 focus:ring-brand-pink transition-all duration-300"
-                      placeholder={data.emailAddressPlaceholder || "john@company.com"}
+                      placeholder={
+                        data.emailAddressPlaceholder || "john@company.com"
+                      }
                     />
                   </div>
                 </div>
@@ -194,7 +219,9 @@ export function StartProjectModal({ isOpen, onClose }: StartProjectModalProps) {
                       type="tel"
                       id="modal-phone"
                       className="w-full px-6 py-4 bg-neutral-50 border border-neutral-200 focus:outline-none focus:border-brand-pink focus:ring-1 focus:ring-brand-pink transition-all duration-300"
-                      placeholder={data.phoneNumberPlaceholder || "+1 (555) 000-0000"}
+                      placeholder={
+                        data.phoneNumberPlaceholder || "+1 (555) 000-0000"
+                      }
                     />
                   </div>
                   <div className="space-y-2">
@@ -208,34 +235,101 @@ export function StartProjectModal({ isOpen, onClose }: StartProjectModalProps) {
                       type="text"
                       id="modal-company"
                       className="w-full px-6 py-4 bg-neutral-50 border border-neutral-200 focus:outline-none focus:border-brand-pink focus:ring-1 focus:ring-brand-pink transition-all duration-300"
-                      placeholder={data.companyNamePlaceholder || "Company Ltd."}
+                      placeholder={
+                        data.companyNamePlaceholder || "Company Ltd."
+                      }
                     />
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <label
-                    htmlFor="modal-subject"
-                    className="text-sm font-bold text-neutral-700 uppercase tracking-wider"
-                  >
-                    {data.subjectLabel || "Subject *"}
-                  </label>
-                  <select
-                    id="modal-subject"
-                    required
-                    defaultValue=""
-                    className="w-full px-6 py-4 bg-neutral-50 border border-neutral-200 focus:outline-none focus:border-brand-pink focus:ring-1 focus:ring-brand-pink transition-all duration-300 appearance-none rounded-none cursor-pointer"
-                  >
-                    <option value="" disabled>
-                      {data.selectSubjectDefault || "Select a subject"}
-                    </option>
-                    <option value="project">Project Discussion</option>
-                    <option value="general">General Inquiry</option>
-                    <option value="partnership">Partnership</option>
-                    <option value="career">Career Opportunities</option>
-                    <option value="other">Other</option>
-                  </select>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label
+                      htmlFor="modal-subject"
+                      className="text-sm font-bold text-neutral-700 uppercase tracking-wider"
+                    >
+                      Service Required *
+                    </label>
+                    <select
+                      id="modal-subject"
+                      required
+                      value={selectedService}
+                      onChange={(e) => setSelectedService(e.target.value)}
+                      className="w-full px-6 py-4 bg-neutral-50 border border-neutral-200 focus:outline-none focus:border-brand-pink focus:ring-1 focus:ring-brand-pink transition-all duration-300 appearance-none rounded-none cursor-pointer text-sm"
+                    >
+                      <option value="" disabled>
+                        Select a service
+                      </option>
+                      <option value="Asset Stewardship (O&M)">
+                        Asset Stewardship (O&M)
+                      </option>
+                      <option value="Project Conceptualisation & Development">
+                        Project Conceptualisation & Development
+                      </option>
+                      <option value="Construction, Commissioning & Relocation">
+                        Construction, Commissioning & Relocation
+                      </option>
+                      <option value="Expert Advisory & Performance Audits">
+                        Expert Advisory & Performance Audits
+                      </option>
+                      <option value="Due Diligence & Asset Health">
+                        Due Diligence & Asset Health
+                      </option>
+                      <option value="Strategic Global Sourcing (Spare Parts)">
+                        Strategic Global Sourcing (Spare Parts)
+                      </option>
+                      <option value="Airport Utility Management">
+                        Airport Utility Management
+                      </option>
+                      <option value="General Business Enquiry">
+                        General Business Enquiry
+                      </option>
+                      <option value="Other / Not sure">Other / Not sure</option>
+                    </select>
+                    <p className="text-xs text-neutral-400 mt-1">
+                      Seeking a job?{" "}
+                      <a
+                        href="/careers"
+                        onClick={onClose}
+                        className="text-brand-pink hover:underline font-medium"
+                      >
+                        Visit our Careers page
+                      </a>
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <label
+                      htmlFor="modal-location"
+                      className="text-sm font-bold text-neutral-700 uppercase tracking-wider"
+                    >
+                      Project Location (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      id="modal-location"
+                      className="w-full px-6 py-4 bg-neutral-50 border border-neutral-200 focus:outline-none focus:border-brand-pink focus:ring-1 focus:ring-brand-pink transition-all duration-300"
+                      placeholder="e.g. Gujarat, India / International"
+                    />
+                  </div>
                 </div>
+
+                {selectedService === "Other / Not sure" && (
+                  <div className="space-y-2 animate-in fade-in duration-300">
+                    <label
+                      htmlFor="modal-other-service"
+                      className="text-sm font-bold text-neutral-700 uppercase tracking-wider"
+                    >
+                      Please Specify Requirement *
+                    </label>
+                    <input
+                      type="text"
+                      id="modal-other-service"
+                      required
+                      className="w-full px-6 py-4 bg-neutral-50 border border-neutral-200 focus:outline-none focus:border-brand-pink focus:ring-1 focus:ring-brand-pink transition-all duration-300 text-sm"
+                      placeholder="e.g. Specialized plant audit, solar engineering, custom equipment..."
+                    />
+                  </div>
+                )}
 
                 <div className="space-y-2">
                   <label
@@ -249,7 +343,9 @@ export function StartProjectModal({ isOpen, onClose }: StartProjectModalProps) {
                     required
                     rows={4}
                     className="w-full px-6 py-4 bg-neutral-50 border border-neutral-200 focus:outline-none focus:border-brand-pink focus:ring-1 focus:ring-brand-pink transition-all duration-300 resize-none"
-                    placeholder={data.messagePlaceholder || "How can we help you?"}
+                    placeholder={
+                      data.messagePlaceholder || "How can we help you?"
+                    }
                   ></textarea>
                 </div>
 
@@ -269,7 +365,8 @@ export function StartProjectModal({ isOpen, onClose }: StartProjectModalProps) {
                       />
                     </svg>
                     <span>
-                      Your message has been sent successfully! We will get back to you shortly.
+                      Your message has been sent successfully! We will get back
+                      to you shortly.
                     </span>
                   </div>
                 )}
@@ -326,6 +423,6 @@ export function StartProjectModal({ isOpen, onClose }: StartProjectModalProps) {
         </div>
       )}
     </AnimatePresence>,
-    document.body
+    document.body,
   );
 }

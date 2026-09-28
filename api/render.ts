@@ -41,12 +41,17 @@ function getSlugFromPath(urlPath: string): string {
     return "service/renewable-energy";
   if (cleanPath === "/services/airport-services")
     return "service/airport-services";
-  if (cleanPath === "/privacy" || cleanPath === "/privacy-policy") return "privacy-policy";
-  if (cleanPath === "/cookies" || cleanPath === "/cookie-policy") return "cookie-policy";
+  if (cleanPath === "/privacy" || cleanPath === "/privacy-policy")
+    return "privacy-policy";
+  if (cleanPath === "/cookies" || cleanPath === "/cookie-policy")
+    return "cookie-policy";
 
   // Dynamic blog / insights
   if (cleanPath.startsWith("/insights/")) {
-    const blogSlug = cleanPath.replace(/^\/insights\//, "").split("/")[0].trim();
+    const blogSlug = cleanPath
+      .replace(/^\/insights\//, "")
+      .split("/")[0]
+      .trim();
     if (blogSlug) return `insight-${blogSlug}`;
   }
 
@@ -69,8 +74,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   let globalSEO: any = {
     siteTitle: "encotec",
-    siteDescription:
-      "Engineering & Project Management Services - Member of Dornier Group",
+    siteDescription: "Engineering & Project Management Services",
     favicon: null,
     googleAnalyticsId: "G-CT894VPLS1",
     gtmId: "GTM-59DCSVDV",
@@ -215,7 +219,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   let html = template;
   html = html.replace(/<title>[^]*?<\/title>/gi, "");
   if (globalSEO.favicon) {
-    html = html.replace(/<link[^>]*rel=["'](icon|apple-touch-icon|shortcut icon)["'][^>]*>\s*/gi, "");
+    html = html.replace(
+      /<link[^>]*rel=["'](icon|apple-touch-icon|shortcut icon)["'][^>]*>\s*/gi,
+      "",
+    );
   }
   html = html.replace(/<head>/i, `<head>${headInjections}`);
 

@@ -17,6 +17,7 @@ import {
 } from "react-simple-maps";
 import {
   ArrowRightIcon,
+  ArrowUpRightIcon,
   MapPinIcon,
   PhoneIcon,
   MailIcon,
@@ -198,6 +199,7 @@ function ContactFormSection() {
     careersEmailAddress: "careers@encotec.com",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedService, setSelectedService] = useState("");
   const [submitStatus, setSubmitStatus] = useState<
     "idle" | "success" | "error"
   >("idle");
@@ -213,7 +215,16 @@ function ContactFormSection() {
     const email = (form.querySelector("#email") as HTMLInputElement).value;
     const phone = (form.querySelector("#phone") as HTMLInputElement).value;
     const company = (form.querySelector("#company") as HTMLInputElement).value;
+    const location =
+      (form.querySelector("#location") as HTMLInputElement)?.value || "";
     const subject = (form.querySelector("#subject") as HTMLSelectElement).value;
+    const otherService = (
+      form.querySelector("#other-service") as HTMLInputElement
+    )?.value;
+    const finalSubject =
+      subject === "Other / Not sure" && otherService
+        ? `Other / Not sure: ${otherService.trim()}`
+        : subject;
     const message = (form.querySelector("#message") as HTMLTextAreaElement)
       .value;
 
@@ -228,9 +239,12 @@ function ContactFormSection() {
         body: JSON.stringify({
           name: fullName,
           email: email,
-          interestedIn: subject,
+          interestedIn: finalSubject,
           budget: company,
-          projectGoals: `Phone: ${phone || "N/A"}\nCompany: ${company || "N/A"}\nMessage:\n${message}`,
+          phone: phone,
+          companyName: company,
+          location: location,
+          projectGoals: `Phone: ${phone || "N/A"}\nCompany: ${company || "N/A"}\nLocation: ${location || "N/A"}\nService Required: ${finalSubject}\nMessage:\n${message}`,
         }),
       });
 
@@ -239,6 +253,7 @@ function ContactFormSection() {
       }
 
       setSubmitStatus("success");
+      setSelectedService("");
       form.reset();
     } catch (err) {
       console.error("Enquiry submit error:", err);
@@ -340,29 +355,93 @@ function ContactFormSection() {
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <label
-                  htmlFor="subject"
-                  className="text-sm font-bold text-neutral-700 uppercase tracking-wider"
-                >
-                  {data.subjectLabel || ""}
-                </label>
-                <select
-                  id="subject"
-                  required
-                  defaultValue=""
-                  className="w-full px-6 py-4 bg-neutral-50 border border-neutral-200 focus:outline-none focus:border-brand-pink focus:ring-1 focus:ring-brand-pink transition-all duration-300 appearance-none rounded-none"
-                >
-                  <option value="" disabled>
-                    {data.selectSubjectDefault || ""}
-                  </option>
-                  <option value="general">General Inquiry</option>
-                  <option value="project">Project Discussion</option>
-                  <option value="partnership">Partnership</option>
-                  <option value="career">Career Opportunities</option>
-                  <option value="other">Other</option>
-                </select>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label
+                    htmlFor="subject"
+                    className="text-sm font-bold text-neutral-700 uppercase tracking-wider"
+                  >
+                    Service Required *
+                  </label>
+                  <select
+                    id="subject"
+                    required
+                    value={selectedService}
+                    onChange={(e) => setSelectedService(e.target.value)}
+                    className="w-full px-6 py-4 bg-neutral-50 border border-neutral-200 focus:outline-none focus:border-brand-pink focus:ring-1 focus:ring-brand-pink transition-all duration-300 appearance-none rounded-none cursor-pointer text-sm"
+                  >
+                    <option value="" disabled>
+                      Select a service
+                    </option>
+                    <option value="Asset Stewardship (O&M)">
+                      Asset Stewardship (O&M)
+                    </option>
+                    <option value="Project Conceptualisation & Development">
+                      Project Conceptualisation & Development
+                    </option>
+                    <option value="Construction, Commissioning & Relocation">
+                      Construction, Commissioning & Relocation
+                    </option>
+                    <option value="Expert Advisory & Performance Audits">
+                      Expert Advisory & Performance Audits
+                    </option>
+                    <option value="Due Diligence & Asset Health">
+                      Due Diligence & Asset Health
+                    </option>
+                    <option value="Strategic Global Sourcing (Spare Parts)">
+                      Strategic Global Sourcing (Spare Parts)
+                    </option>
+                    <option value="Airport Utility Management">
+                      Airport Utility Management
+                    </option>
+                    <option value="General Business Enquiry">
+                      General Business Enquiry
+                    </option>
+                    <option value="Other / Not sure">Other / Not sure</option>
+                  </select>
+                  <p className="text-xs text-neutral-400 mt-1">
+                    Seeking a job?{" "}
+                    <a
+                      href="/careers"
+                      className="text-brand-pink hover:underline font-medium"
+                    >
+                      Visit our Careers page
+                    </a>
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <label
+                    htmlFor="location"
+                    className="text-sm font-bold text-neutral-700 uppercase tracking-wider"
+                  >
+                    Project Location (Optional)
+                  </label>
+                  <input
+                    type="text"
+                    id="location"
+                    className="w-full px-6 py-4 bg-neutral-50 border border-neutral-200 focus:outline-none focus:border-brand-pink focus:ring-1 focus:ring-brand-pink transition-all duration-300"
+                    placeholder="e.g. Gujarat, India / International"
+                  />
+                </div>
               </div>
+
+              {selectedService === "Other / Not sure" && (
+                <div className="space-y-2 animate-in fade-in duration-300">
+                  <label
+                    htmlFor="other-service"
+                    className="text-sm font-bold text-neutral-700 uppercase tracking-wider"
+                  >
+                    Please Specify Requirement *
+                  </label>
+                  <input
+                    type="text"
+                    id="other-service"
+                    required
+                    className="w-full px-6 py-4 bg-neutral-50 border border-neutral-200 focus:outline-none focus:border-brand-pink focus:ring-1 focus:ring-brand-pink transition-all duration-300 text-sm"
+                    placeholder="e.g. Specialized plant audit, solar engineering, custom equipment..."
+                  />
+                </div>
+              )}
 
               <div className="space-y-2">
                 <label
@@ -468,14 +547,21 @@ function ContactFormSection() {
                     className="text-brand-pink flex-shrink-0 mt-0.5"
                   />
 
-                  <span>
-                    {data.addressLine1 || ""}
-                    {data.addressLine2 && (
-                      <>
-                        <br />
-                        {data.addressLine2}
-                      </>
-                    )}
+                  <span className="flex flex-col gap-1">
+                    <span>
+                      {data.addressLine1 || "C-85, Sector-63"}
+                      <br />
+                      {data.addressLine2 || "Noida - 201 301, Uttar Pradesh, India"}
+                    </span>
+                    <a
+                      href="https://maps.google.com/?q=Encotec+Energy+India+C-85+Sector-63+Noida"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-xs text-brand-pink hover:underline font-semibold mt-1"
+                    >
+                      <span>Get Directions (Google Maps)</span>
+                      <ArrowUpRightIcon size={13} />
+                    </a>
                   </span>
                 </p>
                 <p className="flex items-center gap-3">
@@ -575,9 +661,9 @@ function GlobalOfficesMap() {
           name: "Noida (HQ)",
           coordinates: [77.39, 28.58],
           region: "India",
-          address: "Corporate Headquarters",
-          suite: "Noida, Uttar Pradesh",
-          phone: "+91 120 555 0100",
+          address: "C-85, Sector-63",
+          suite: "Noida - 201 301, Uttar Pradesh",
+          phone: "+91 120 4155612",
         },
         {
           name: "New Delhi",

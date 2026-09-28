@@ -58,7 +58,7 @@ export function Navigation({ variant = "light" }: NavigationProps) {
         <Link to="/" className="flex items-center">
           <img
             src="/encotec-logo.png"
-            alt="Encotec - Member of Dornier Group"
+            alt="Encotec home"
             className="h-10 w-auto object-contain"
           />
         </Link>
