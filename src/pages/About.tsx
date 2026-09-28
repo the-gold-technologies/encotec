@@ -15,6 +15,7 @@ import {
   HeartHandshakeIcon,
   LeafIcon,
   BriefcaseIcon,
+  ChevronDownIcon,
 } from "lucide-react";
 import { useSectionData } from "../store/useCMSStore";
 import { useSEO } from "../hooks/useSEO";
@@ -294,7 +295,7 @@ function MissionVisionValues() {
           </p>
         </motion.div>
 
-        {/* Mission & Vision */}
+        {/* Vision & Mission */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
           <motion.div
             initial={{
@@ -314,9 +315,9 @@ function MissionVisionValues() {
             className="p-10 bg-white border-l-4 border-brand-pink"
           >
             <h3 className="text-2xl font-black text-neutral-900 mb-4 uppercase tracking-tight">
-              {data.missionTitle}
+              {data.visionTitle}
             </h3>
-            <p className="text-neutral-700 leading-relaxed">{missionText}</p>
+            <p className="text-neutral-700 leading-relaxed">{visionText}</p>
           </motion.div>
 
           <motion.div
@@ -337,9 +338,9 @@ function MissionVisionValues() {
             className="p-10 bg-white border-l-4 border-brand-pink"
           >
             <h3 className="text-2xl font-black text-neutral-900 mb-4 uppercase tracking-tight">
-              {data.visionTitle}
+              {data.missionTitle}
             </h3>
-            <p className="text-neutral-700 leading-relaxed">{visionText}</p>
+            <p className="text-neutral-700 leading-relaxed">{missionText}</p>
           </motion.div>
         </div>
 
@@ -829,6 +830,13 @@ function GlobalPresence() {
 function Leadership() {
   const { data } = useSectionData<any>("about", "Leadership");
   const leaders = data.leaders || [];
+  const [expandedLeaderIndex, setExpandedLeaderIndex] = React.useState<
+    number | null
+  >(null);
+
+  const toggleLeader = (idx: number) => {
+    setExpandedLeaderIndex((prev) => (prev === idx ? null : idx));
+  };
 
   if (!data.heading && leaders.length === 0) return null;
 
@@ -862,58 +870,98 @@ function Leadership() {
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {leaders.map((leader: any, i: number) => (
-            <motion.div
-              key={i}
-              initial={{
-                opacity: 0,
-                y: 30,
-              }}
-              whileInView={{
-                opacity: 1,
-                y: 0,
-              }}
-              viewport={{
-                once: true,
-              }}
-              transition={{
-                duration: 0.6,
-                delay: i * 0.2,
-              }}
-              className="relative p-10 bg-neutral-900 border border-white/10 hover:border-brand-pink/40 transition-all duration-300 overflow-hidden group min-h-[600px] flex flex-col justify-end"
-            >
-              {/* Background Image from CMS */}
-              {leader.image && (
-                <>
-                  <img
-                    src={leader.image}
-                    alt={leader.name}
-                    className="absolute inset-0 w-full h-full object-cover object-top opacity-40 group-hover:opacity-55 group-hover:scale-105 transition-all duration-700 pointer-events-none"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/80 to-neutral-950/40 pointer-events-none" />
-                </>
-              )}
+          {leaders.map((leader: any, i: number) => {
+            const isExpanded = expandedLeaderIndex === i;
+            return (
+              <motion.div
+                key={i}
+                initial={{
+                  opacity: 0,
+                  y: 30,
+                }}
+                whileInView={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                viewport={{
+                  once: true,
+                }}
+                transition={{
+                  duration: 0.6,
+                  delay: i * 0.2,
+                }}
+                className="relative p-10 bg-neutral-900 border border-white/10 hover:border-brand-pink/40 transition-all duration-300 overflow-hidden group min-h-[600px] flex flex-col justify-end"
+              >
+                {/* Background Image from CMS */}
+                {leader.image && (
+                  <>
+                    <img
+                      src={leader.image}
+                      alt={leader.name}
+                      className={`absolute inset-0 w-full h-full object-cover object-top transition-all duration-500 pointer-events-none ${
+                        isExpanded
+                          ? "opacity-35 group-hover:opacity-45 scale-105"
+                          : "opacity-100 brightness-110 contrast-[1.03] group-hover:scale-105"
+                      }`}
+                    />
+                    {/* Face side ambient highlight to keep the face bright & clear */}
+                    {!isExpanded && (
+                      <div className="absolute inset-x-0 top-0 h-[55%] bg-gradient-to-b from-white/10 via-transparent to-transparent pointer-events-none" />
+                    )}
+                    {/* Dark Overlay: Full dark previous-way gradient when expanded; lower-only gradient (42%) when collapsed so face stays completely bright */}
+                    {isExpanded ? (
+                      <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/95 to-neutral-950/80 pointer-events-none transition-all duration-500" />
+                    ) : (
+                      <div className="absolute inset-x-0 bottom-0 h-[42%] bg-gradient-to-t from-neutral-950 via-neutral-950/85 to-transparent pointer-events-none transition-all duration-500" />
+                    )}
+                  </>
+                )}
 
-              {/* Static Content (Always Visible) */}
-              <div className="relative z-10">
-                {leader.role && (
-                  <div className="text-brand-pink text-xs md:text-sm font-bold tracking-wider uppercase mb-2">
-                    {leader.role}
-                  </div>
-                )}
-                {leader.name && (
-                  <h3 className="text-2xl md:text-3xl font-black text-white mb-6">
-                    {leader.name}
-                  </h3>
-                )}
-                {leader.bio && (
-                  <p className="text-neutral-300 leading-relaxed text-sm md:text-base">
-                    {leader.bio}
-                  </p>
-                )}
-              </div>
-            </motion.div>
-          ))}
+                {/* Content Area */}
+                <div className="relative z-10">
+                  {leader.role && (
+                    <div className="text-brand-pink text-xs md:text-sm font-bold tracking-wider uppercase mb-2">
+                      {leader.role}
+                    </div>
+                  )}
+                  {leader.name && (
+                    <h3 className="text-2xl md:text-3xl font-black text-white mb-4">
+                      {leader.name}
+                    </h3>
+                  )}
+                  {leader.bio && (
+                    <div>
+                      <p
+                        className={`text-neutral-300 leading-relaxed text-sm md:text-base ${
+                          isExpanded
+                            ? "whitespace-pre-line"
+                            : "line-clamp-2 md:line-clamp-3"
+                        }`}
+                      >
+                        {leader.bio}
+                      </p>
+                      {leader.bio.length > 90 && (
+                        <button
+                          type="button"
+                          onClick={() => toggleLeader(i)}
+                          className="mt-4 inline-flex items-center gap-2 text-xs font-bold text-brand-pink uppercase tracking-widest hover:text-white transition-colors cursor-pointer group/btn"
+                        >
+                          <span className="border-b border-brand-pink/50 group-hover/btn:border-white pb-0.5 transition-colors">
+                            {isExpanded ? "Close Profile" : "View Profile"}
+                          </span>
+                          <ChevronDownIcon
+                            className={`w-3.5 h-3.5 text-brand-pink group-hover/btn:text-white transition-transform duration-300 ${
+                              isExpanded ? "rotate-180" : ""
+                            }`}
+                          />
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

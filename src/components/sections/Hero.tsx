@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRightIcon } from "lucide-react";
 import { useSectionData, useCMSStore } from "../../store/useCMSStore";
 import { LinkText } from "../ui/LinkText";
@@ -19,6 +19,36 @@ export function Hero() {
   const MotionHeading = (motion as any)[HeadingTag] || motion.h1;
 
   const serviceTags = data.serviceTags || [];
+
+  const heroImages: string[] = (
+    Array.isArray(data.images) && data.images.length > 0
+      ? data.images
+      : Array.isArray(data.photos) && data.photos.length > 0
+        ? data.photos
+        : data.backgroundImage
+          ? [data.backgroundImage]
+          : []
+  ).filter(Boolean);
+
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    if (heroImages.length <= 1) return;
+    const timer = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [heroImages.length]);
+
+  const prevImage = () => {
+    setCurrentImageIndex(
+      (prev) => (prev - 1 + heroImages.length) % heroImages.length,
+    );
+  };
+
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
+  };
   const heroStats = (
     Array.isArray(data.stats) && data.stats.length > 0
       ? data.stats
@@ -191,16 +221,50 @@ export function Hero() {
               }}
               className="relative"
             >
-              {/* Main Image */}
-              <div className="relative overflow-hidden shadow-2xl shadow-black/20">
-                <img
-                  src={data.backgroundImage}
-                  alt="Wind turbines at sunset"
-                  className="w-full h-[420px] md:h-[520px] lg:h-[580px] object-cover"
-                />
+              {/* Main Image Carousel */}
+              <div className="relative overflow-hidden shadow-2xl shadow-black/20 group h-[420px] md:h-[520px] lg:h-[580px] bg-neutral-900">
+                <AnimatePresence mode="wait">
+                  {(heroImages[currentImageIndex] || data.backgroundImage) && (
+                    <motion.img
+                      key={currentImageIndex}
+                      src={
+                        heroImages[currentImageIndex] || data.backgroundImage
+                      }
+                      alt={`Encotec Energy Infrastructure ${currentImageIndex + 1}`}
+                      initial={{ opacity: 0, scale: 1.05 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.8, ease: "easeInOut" }}
+                      className="w-full h-full object-cover"
+                    />
+                  )}
+                </AnimatePresence>
 
                 {/* Gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/10 pointer-events-none" />
+
+                {/* Dot indicators and photo counter */}
+                {heroImages.length > 1 && (
+                  <div className="absolute bottom-4 right-4 z-20 flex items-center gap-3 bg-black/50 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/10">
+                    <span className="text-[11px] font-mono font-bold text-white tracking-wider">
+                      0{currentImageIndex + 1} / 0{heroImages.length}
+                    </span>
+                    <div className="flex items-center gap-1.5">
+                      {heroImages.map((_, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => setCurrentImageIndex(idx)}
+                          aria-label={`Go to slide ${idx + 1}`}
+                          className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                            idx === currentImageIndex
+                              ? "w-6 bg-brand-pink"
+                              : "w-1.5 bg-white/50 hover:bg-white/80"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Projects Delivered Badge */}
@@ -218,7 +282,7 @@ export function Hero() {
                     duration: 0.5,
                     delay: 1,
                   }}
-                  className="absolute -bottom-6 left-4 md:left-8 z-20"
+                  className="absolute -bottom-6 left-4 md:left-8 z-30"
                   style={{
                     transform: "rotate(-3deg)",
                   }}

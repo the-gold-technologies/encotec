@@ -375,6 +375,13 @@ function LeadershipPhilosophy() {
 
 function ExecutiveTeam() {
   const { data } = useSectionData<any>("leadership", "ExecutiveTeam");
+  const [expandedExecIndex, setExpandedExecIndex] = useState<number | null>(
+    null,
+  );
+
+  const toggleExec = (idx: number) => {
+    setExpandedExecIndex((prev) => (prev === idx ? null : idx));
+  };
 
   const tagline = data.tagline;
   const heading = data.heading;
@@ -468,66 +475,124 @@ function ExecutiveTeam() {
         )}
 
         <div className="grid lg:grid-cols-2 gap-8">
-          {executives.map((exec, index) => (
-            <motion.div
-              key={exec.name || index}
-              initial={{
-                opacity: 0,
-                y: 40,
-              }}
-              whileInView={{
-                opacity: 1,
-                y: 0,
-              }}
-              viewport={{
-                once: true,
-              }}
-              transition={{
-                duration: 0.6,
-                delay: index * 0.2,
-              }}
-              className="relative min-h-[600px] max-h-max overflow-hidden group bg-neutral-800"
-            >
-              {/* Background Image from CMS */}
-              {exec.image && (
-                <img
-                  src={exec.image}
-                  alt={exec.name}
-                  className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+          {executives.map((exec, index) => {
+            const isExpanded = expandedExecIndex === index;
+            return (
+              <motion.div
+                key={exec.name || index}
+                initial={{
+                  opacity: 0,
+                  y: 40,
+                }}
+                whileInView={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                viewport={{
+                  once: true,
+                }}
+                transition={{
+                  duration: 0.6,
+                  delay: index * 0.2,
+                }}
+                className="relative min-h-[600px] overflow-hidden group bg-neutral-900 border border-white/10 hover:border-brand-pink/40 transition-all duration-300 flex flex-col justify-end"
+              >
+                {/* Background Image from CMS - 100% brightness, sharp & clear face */}
+                {exec.image && (
+                  <img
+                    src={exec.image}
+                    alt={exec.name}
+                    className="absolute inset-0 w-full h-full object-cover object-top brightness-110 contrast-[1.03] transition-transform duration-700 group-hover:scale-105 pointer-events-none"
+                  />
+                )}
+
+                {/* Face side ambient highlight to keep face clear and well-lit */}
+                {!isExpanded && (
+                  <div className="absolute inset-x-0 top-0 h-[55%] bg-gradient-to-b from-white/10 via-transparent to-transparent pointer-events-none" />
+                )}
+
+                {/* Default Bottom Gradient (Only at bottom text area 42%, upper face remains 100% clear & bright) */}
+                <div
+                  className={`absolute inset-x-0 bottom-0 h-[42%] bg-gradient-to-t from-neutral-950 via-neutral-950/85 to-transparent transition-opacity duration-500 pointer-events-none ${
+                    isExpanded
+                      ? "opacity-0"
+                      : "opacity-100 group-hover:opacity-0"
+                  }`}
                 />
-              )}
 
-              {/* Default Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-neutral-900/40 to-transparent transition-opacity duration-500 group-hover:opacity-0" />
-
-              {/* Hover Glassmorphism Overlay */}
-              <div className="absolute inset-0 bg-neutral-900/90 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500 p-8 md:p-12 flex flex-col justify-start pt-12">
-                <p className="text-sm text-neutral-300 leading-relaxed mb-6">
-                  {exec.bio}
-                </p>
-                <div className="flex flex-wrap gap-2 mt-auto pb-24">
-                  {exec.tags.map((tag: string) => (
-                    <span
-                      key={tag}
-                      className="px-3 py-1 border border-brand-pink/50 text-brand-pink text-xs font-bold uppercase tracking-wider"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+                {/* Hover / Click Glassmorphism Overlay */}
+                <div
+                  className={`absolute inset-0 bg-neutral-900/95 backdrop-blur-md transition-all duration-500 p-8 md:p-12 flex flex-col justify-start pt-12 z-20 ${
+                    isExpanded
+                      ? "opacity-100 pointer-events-auto"
+                      : "opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto"
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <p className="text-brand-pink font-bold text-xs uppercase tracking-wider mb-1">
+                        {exec.role}
+                      </p>
+                      <h3 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tight">
+                        {exec.name}
+                      </h3>
+                    </div>
+                    {isExpanded && (
+                      <button
+                        type="button"
+                        onClick={() => toggleExec(index)}
+                        className="text-neutral-400 hover:text-white text-xs font-bold uppercase tracking-wider px-3 py-1.5 border border-white/20 hover:border-brand-pink transition-colors cursor-pointer"
+                      >
+                        Close ✕
+                      </button>
+                    )}
+                  </div>
+                  <p className="text-sm text-neutral-300 leading-relaxed mb-6 overflow-y-auto max-h-[340px] pr-2">
+                    {exec.bio}
+                  </p>
+                  {exec.tags && exec.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mt-auto pb-4">
+                      {exec.tags.map((tag: string) => (
+                        <span
+                          key={tag}
+                          className="px-3 py-1 border border-brand-pink/50 text-brand-pink text-xs font-bold uppercase tracking-wider"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
-              </div>
 
-              {/* Always Visible Name & Role */}
-              <div className="absolute bottom-0 left-0 w-full p-8 md:p-12 pointer-events-none z-10">
-                <h3 className="text-3xl font-black text-white mb-2 uppercase tracking-tight">
-                  {exec.name}
-                </h3>
-                <p className="text-brand-pink font-bold text-sm tracking-wider uppercase">
-                  {exec.role}
-                </p>
-              </div>
-            </motion.div>
-          ))}
+                {/* Always Visible Info: Name, Role, 2-line Bio Preview, and 'View Profile' Indicator */}
+                <div
+                  className={`relative z-10 p-8 md:p-12 transition-opacity duration-300 ${
+                    isExpanded ? "opacity-0" : "group-hover:opacity-0"
+                  }`}
+                >
+                  <p className="text-brand-pink font-bold text-xs tracking-wider uppercase mb-1">
+                    {exec.role}
+                  </p>
+                  <h3 className="text-2xl md:text-3xl font-black text-white mb-2 uppercase tracking-tight">
+                    {exec.name}
+                  </h3>
+                  {exec.bio && (
+                    <p className="text-neutral-300 text-xs sm:text-sm line-clamp-2 leading-relaxed max-w-lg mb-3">
+                      {exec.bio}
+                    </p>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => toggleExec(index)}
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-pink uppercase tracking-wider hover:text-white transition-colors cursor-pointer"
+                  >
+                    <span>View Profile</span>
+                    <span className="text-sm">→</span>
+                  </button>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>
