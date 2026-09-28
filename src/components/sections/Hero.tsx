@@ -18,7 +18,23 @@ export function Hero() {
     | "h6";
   const MotionHeading = (motion as any)[HeadingTag] || motion.h1;
 
-  const serviceTags = data.serviceTags || [];
+  const rawServiceTags = Array.isArray(data?.serviceTags)
+    ? data.serviceTags
+    : [];
+  const serviceTags: Array<{ label: string; url: string }> = rawServiceTags
+    .map((tag: any) => {
+      if (typeof tag === "object" && tag !== null) {
+        return {
+          label: String(tag.label || tag.name || tag.text || "").trim(),
+          url: String(tag.url || tag.link || tag.href || "").trim(),
+        };
+      }
+      return {
+        label: String(tag || "").trim(),
+        url: "",
+      };
+    })
+    .filter((tag: { label: string; url: string }) => Boolean(tag.label));
 
   const heroImages: string[] = (
     Array.isArray(data.images) && data.images.length > 0
@@ -143,31 +159,67 @@ export function Hero() {
               <LinkText text={data.description} />
             </motion.p>
 
-            {/* Service Tags */}
-            <motion.div
-              initial={{
-                opacity: 0,
-                y: 15,
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
-              }}
-              transition={{
-                duration: 0.6,
-                delay: 0.35,
-              }}
-              className="flex flex-wrap gap-2.5 mb-8"
-            >
-              {serviceTags.map((tag: string, i: number) => (
-                <span
-                  key={i}
-                  className="px-4 py-2 border border-neutral-300 text-[11px] font-bold tracking-wider text-neutral-700 uppercase hover:border-brand-pink hover:text-brand-pink transition-colors duration-300 cursor-default"
-                >
-                  {tag}
-                </span>
-              ))}
-            </motion.div>
+            {/* Service Tags / Hyperlink Boxes */}
+            {serviceTags.length > 0 && (
+              <motion.div
+                initial={{
+                  opacity: 0,
+                  y: 15,
+                }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                transition={{
+                  duration: 0.6,
+                  delay: 0.35,
+                }}
+                className="flex flex-wrap gap-2.5 mb-8"
+              >
+                {serviceTags.map((tag, i: number) => {
+                  const isExternal =
+                    tag.url.startsWith("http://") ||
+                    tag.url.startsWith("https://");
+                  const boxClasses =
+                    "px-4 py-2 border border-neutral-300 text-[11px] font-bold tracking-wider text-neutral-700 uppercase hover:border-brand-pink hover:text-brand-pink hover:bg-neutral-50 transition-all duration-300 inline-flex items-center gap-1.5 cursor-pointer shadow-sm";
+
+                  if (isExternal) {
+                    return (
+                      <a
+                        key={i}
+                        href={tag.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={boxClasses}
+                      >
+                        {tag.label}
+                      </a>
+                    );
+                  }
+
+                  if (tag.url) {
+                    return (
+                      <Link
+                        key={i}
+                        to={tag.url}
+                        className={boxClasses}
+                      >
+                        {tag.label}
+                      </Link>
+                    );
+                  }
+
+                  return (
+                    <span
+                      key={i}
+                      className={boxClasses}
+                    >
+                      {tag.label}
+                    </span>
+                  );
+                })}
+              </motion.div>
+            )}
 
             {/* CTA Buttons */}
             <motion.div
