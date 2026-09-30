@@ -73,7 +73,7 @@ export function Navigation({ variant = "light" }: NavigationProps) {
             }`}
           >
             <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
-            SINCE 2011
+            SINCE 2009
           </div>
           <Link to="/" className={getLinkClass("/")}>
             Home
@@ -201,7 +201,7 @@ export function Navigation({ variant = "light" }: NavigationProps) {
                 <div className="mt-auto pt-8">
                   <div className="flex items-center gap-2 px-3 py-2 rounded-full border border-neutral-200 text-xs font-medium text-neutral-600 w-fit">
                     <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
-                    SINCE 2011
+                    SINCE 2009
                   </div>
                 </div>
               </div>
