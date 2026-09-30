@@ -38,7 +38,10 @@ export function AboutSection() {
   const { data } = useSectionData<any>("home", "AboutUs");
   const stats = (data.stats || []).map((stat: any, i: number) => ({
     ...stat,
-    icon: (stat.icon && iconMap[stat.icon]) || defaultIcons[i % defaultIcons.length] || ZapIcon,
+    icon:
+      (stat.icon && iconMap[stat.icon]) ||
+      defaultIcons[i % defaultIcons.length] ||
+      ZapIcon,
   }));
 
   return (
@@ -125,12 +128,16 @@ export function AboutSection() {
               }}
               className="space-y-5 mb-8"
             >
-              <p className="text-neutral-500 leading-relaxed">
-                <LinkText text={data.paragraphs?.[0]} />
-              </p>
-              <p className="text-neutral-500 leading-relaxed">
-                <LinkText text={data.paragraphs?.[1]} />
-              </p>
+              {(Array.isArray(data.paragraphs) && data.paragraphs.length > 0
+                ? data.paragraphs
+                : [data.paragraphs?.[0], data.paragraphs?.[1]]
+              )
+                .filter(Boolean)
+                .map((para: string, idx: number) => (
+                  <p key={idx} className="text-neutral-500 leading-relaxed">
+                    <LinkText text={para} />
+                  </p>
+                ))}
             </motion.div>
 
             {/* Learn More Link */}
