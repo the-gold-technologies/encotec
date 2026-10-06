@@ -18,13 +18,7 @@ import { useSEO } from "../../hooks/useSEO";
 const vasFeatureIconMap = [GlobeIcon, PackageIcon, WrenchIcon];
 
 function SourcingHero() {
-  const { data } = useSectionData<any>("value-added", "SourcingHero", {
-    label: "Strategic Global Sourcing",
-    headingPart1: "The Global Link for ",
-    headingHighlight: "Critical Equipment",
-    description:
-      "Downtime is often caused by a missing part, not a missing plan. Encotec acts as your strategic sourcing partner, leveraging deep relationships with manufacturers to get you what you need, when you need it.",
-  });
+  const { data } = useSectionData<any>("value-added", "SourcingHero");
   return (
     <section className="relative min-h-[90vh] w-full bg-neutral-900 text-white overflow-hidden flex items-center pt-20">
       <div className="absolute inset-0 opacity-10">
@@ -102,25 +96,7 @@ function SourcingHero() {
   );
 }
 function SourcingFeatures() {
-  const { data } = useSectionData<any>("value-added", "SourcingFeatures", {
-    featuresList: [
-      {
-        title: "Global OEM Network",
-        description:
-          "We have established tie-ups with over  major OEMs in China, Vietnam, Korea, and India, giving you direct access to high-quality components without the logistical headache.",
-      },
-      {
-        title: "Comprehensive Inventory",
-        description:
-          "We supply everything from high-pressure boiler spares to coal mill rollers and specialized electrical actuators, ensuring your entire plant is covered.",
-      },
-      {
-        title: "Technical Support",
-        description:
-          "We don't just supply parts; we provide the engineering support to ensure they are integrated correctly and perform to specification.",
-      },
-    ],
-  });
+  const { data } = useSectionData<any>("value-added", "SourcingFeatures");
   const features = (data.features || data.featuresList || []).map(
     (f: any, i: number) => ({ ...f, icon: vasFeatureIconMap[i] || GlobeIcon }),
   );
@@ -166,21 +142,7 @@ function SourcingFeatures() {
   );
 }
 function SourcingAdvantage() {
-  const { data } = useSectionData<any>("value-added", "SourcingAdvantage", {
-    headingPart1: "More Than Just ",
-    headingHighlight: "Procurement",
-    description:
-      'Procurement is transactional; strategic sourcing is a partnership. Because we operate plants ourselves, we understand the critical difference between a part that "fits" and a part that "performs".',
-    paragraphs: [
-      "Our engineering team vets every supplier and verifies every specification. We handle the complex logistics, customs clearance, and quality assurance, delivering peace of mind along with your critical spares.",
-    ],
-    cards: [
-      { title: "Quality Assured", icon: "ShieldCheck" },
-      { title: "65+ Global OEMs", icon: "Globe" },
-      { title: "Logistics Managed", icon: "Truck" },
-      { title: "Engineering Backed", icon: "Wrench" },
-    ],
-  });
+  const { data } = useSectionData<any>("value-added", "SourcingAdvantage");
   const paragraphs = data.paragraphs || [];
   const cards = data.cards || [];
 
@@ -261,13 +223,7 @@ function SourcingAdvantage() {
   );
 }
 function CTASection() {
-  const { data } = useSectionData<any>("value-added", "CTASection", {
-    heading: "Sourcing Critical Spares?",
-    description:
-      "Access our network of major OEMs in China, Vietnam, and beyond for your spare part needs.",
-    ctaLabel: "Request a Quote",
-    ctaUrl: "/contact",
-  });
+  const { data } = useSectionData<any>("value-added", "CTASection");
   return (
     <section className="py-32 bg-white text-center">
       <div className="max-w-4xl mx-auto px-6">

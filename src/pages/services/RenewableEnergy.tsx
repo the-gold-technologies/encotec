@@ -15,13 +15,7 @@ import { useSEO } from "../../hooks/useSEO";
 const reFeatureIconMap = [SearchIcon, ActivityIcon, TrendingUpIcon];
 
 function AdvisoryHero() {
-  const { data } = useSectionData<any>("renewable-energy", "AdvisoryHero", {
-    label: "Expert Advisory & Performance Audits",
-    headingPart1: "Solving the Hardest ",
-    headingHighlight: "Engineering Problems",
-    description:
-      "When a plant is running but not performing, or when technical faults disrupt your peace of mind, our expert advisory team steps in. We provide high-level problem solving that goes beyond basic maintenance.",
-  });
+  const { data } = useSectionData<any>("renewable-energy", "AdvisoryHero");
   return (
     <section className="relative min-h-[90vh] w-full bg-neutral-900 text-white overflow-hidden flex items-center pt-20">
       <div className="absolute inset-0 opacity-20">
@@ -89,25 +83,7 @@ function AdvisoryHero() {
   );
 }
 function AdvisoryFeatures() {
-  const { data } = useSectionData<any>("renewable-energy", "AdvisoryFeatures", {
-    featuresList: [
-      {
-        title: "Specialised Testing (NDT)",
-        description:
-          "We use Non-Destructive Testing to assess the health of your equipment without causing further downtime. Identify micro-fractures and wear before they lead to catastrophic failure.",
-      },
-      {
-        title: "Efficiency Audits",
-        description:
-          "Our in-house team conducts energy efficiency and steam path audits to identify savings and reduce your carbon footprint. We find the lost megawatts in your system.",
-      },
-      {
-        title: "5S & Process Improvement",
-        description:
-          "We implement industrial standards (5S) to improve workplace safety and operational flow. A clean, organized plant is a safe and efficient plant.",
-      },
-    ],
-  });
+  const { data } = useSectionData<any>("renewable-energy", "AdvisoryFeatures");
   const features = (data.features || data.featuresList || []).map(
     (f: any, i: number) => ({ ...f, icon: reFeatureIconMap[i] || SearchIcon }),
   );
@@ -153,37 +129,7 @@ function AdvisoryFeatures() {
   );
 }
 function DiagnosticProcess() {
-  const { data } = useSectionData<any>(
-    "renewable-energy",
-    "DiagnosticProcess",
-    {
-      heading: "Our Diagnostic Approach",
-      description:
-        "We don't guess; we measure. Our advisory services are built on hard data and deep engineering expertise.",
-      steps: [
-        {
-          step: "01",
-          title: "Assess",
-          desc: "Comprehensive site evaluation and data gathering",
-        },
-        {
-          step: "02",
-          title: "Analyze",
-          desc: "Deep dive into performance metrics and NDT results",
-        },
-        {
-          step: "03",
-          title: "Advise",
-          desc: "Actionable recommendations for improvement",
-        },
-        {
-          step: "04",
-          title: "Optimize",
-          desc: "Implementation support and verification",
-        },
-      ],
-    },
-  );
+  const { data } = useSectionData<any>("renewable-energy", "DiagnosticProcess");
   const steps = data.steps || [];
 
   return (
@@ -248,13 +194,7 @@ function DiagnosticProcess() {
   );
 }
 function AdvisoryCTA() {
-  const { data } = useSectionData<any>("renewable-energy", "CTASection", {
-    heading: "Is Your Asset Reaching Its Full Potential?",
-    description:
-      "Speak with our specialized engineers about our expert advisory and performance audits.",
-    ctaLabel: "Request an Audit",
-    ctaUrl: "/contact",
-  });
+  const { data } = useSectionData<any>("renewable-energy", "CTASection");
   return (
     <section className="py-32 bg-white text-center">
       <div className="max-w-4xl mx-auto px-6">

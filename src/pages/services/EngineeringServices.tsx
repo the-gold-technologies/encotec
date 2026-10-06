@@ -85,20 +85,7 @@ function AnimatedCounter({
 }
 // Immersive Hero Section
 function EngineeringHero() {
-  const { data } = useSectionData<any>(
-    "engineering-services",
-    "EngineeringHero",
-    {
-      heroTitle: "ENGINEERING SERVICES",
-      heroSubtitle:
-        "Comprehensive engineering solutions forming the foundation of reliable and efficient energy infrastructure across power generation, transmission, and renewable energy projects.",
-      backgroundImage:
-        "https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&q=80&w=2400",
-      stat1: "500+ Projects Engineered",
-      stat2: "8000+ MW Designed",
-      stat3: "99.2% Design Accuracy",
-    },
-  );
+  const { data } = useSectionData<any>("engineering-services", "EngineeringHero");
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 500], [0, 150]);
   const opacity = useTransform(scrollY, [0, 300], [1, 0.3]);
@@ -293,24 +280,7 @@ function EngineeringHero() {
 }
 // Overview Section
 function OverviewSection() {
-  const { data } = useSectionData<any>(
-    "engineering-services",
-    "OverviewSection",
-    {
-      tagline: "Overview",
-      heading: "Building the Foundation of Reliable Energy Infrastructure",
-      para1:
-        "Our engineering services deliver comprehensive solutions that form the foundation of reliable and efficient energy infrastructure. We bring deep technical expertise across feasibility analysis, system design, and detailed engineering for power generation, transmission, and renewable energy projects.",
-      para2:
-        "From initial site assessment to final design validation, our engineering team ensures every project is built on a strong technical foundation that optimizes performance, minimizes risk, and delivers long-term value.",
-      quote:
-        "Engineering excellence is not just about technical precision — it's about understanding the entire lifecycle and designing for reliability, efficiency, and sustainable performance.",
-      image:
-        "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?auto=format&fit=crop&q=80&w=1200",
-      badgeTitle: "Engineering Excellence",
-      badgeValue: "Since 2009",
-    },
-  );
+  const { data } = useSectionData<any>("engineering-services", "OverviewSection");
   return (
     <section className="py-32 bg-white">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
@@ -424,60 +394,7 @@ function OverviewSection() {
 }
 // Key Capabilities Section
 function CapabilitiesSection() {
-  const { data } = useSectionData<any>(
-    "engineering-services",
-    "CapabilitiesSection",
-    {
-      tagline: "Capabilities",
-      heading: "Key Capabilities",
-      subheading:
-        "Our engineering services span the complete project lifecycle, from initial assessment to detailed design and technical validation.",
-      capabilitiesList: [
-        {
-          title: "Site Assessment & Evaluation",
-          description:
-            "Comprehensive technical evaluation of site conditions, resource availability, and project feasibility",
-          image:
-            "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=1200",
-        },
-        {
-          title: "Energy Yield Analysis",
-          description:
-            "Detailed resource assessment and energy generation forecasting for optimal project planning",
-          image:
-            "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&q=80&w=1200",
-        },
-        {
-          title: "Feasibility Studies",
-          description:
-            "Pre-feasibility and detailed feasibility studies with technical and commercial evaluation",
-          image:
-            "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=1200",
-        },
-        {
-          title: "Design & Engineering",
-          description:
-            "Design review, detailed engineering, and preparation of comprehensive project reports (DPR)",
-          image:
-            "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=1200",
-        },
-        {
-          title: "System Integration",
-          description:
-            "Power evacuation planning and system integration for seamless grid connectivity",
-          image:
-            "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?auto=format&fit=crop&q=80&w=1200",
-        },
-        {
-          title: "Transmission & Substation Design",
-          description:
-            "Transmission line design (33kV to 765kV) and substation design (AIS/GIS systems)",
-          image:
-            "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=1200",
-        },
-      ],
-    },
-  );
+  const { data } = useSectionData<any>("engineering-services", "CapabilitiesSection");
   const capabilities = (data.capabilitiesList || []).map(
     (cap: any, i: number) => ({
       ...cap,
@@ -581,53 +498,7 @@ function CapabilitiesSection() {
 }
 // Engineering Process Section
 function ProcessSection() {
-  const { data } = useSectionData<any>(
-    "engineering-services",
-    "ProcessSection",
-    {
-      tagline: "Our Approach",
-      heading: "Engineering Methodology",
-      subheading:
-        "A systematic approach to engineering excellence, ensuring every project is built on a foundation of technical rigor and precision.",
-      stepsList: [
-        {
-          title: "Assessment",
-          description:
-            "Comprehensive site evaluation, resource analysis, and technical feasibility assessment",
-          image:
-            "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=1200",
-        },
-        {
-          title: "Analysis",
-          description:
-            "Energy yield forecasting, system modeling, and detailed technical evaluation",
-          image:
-            "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=1200",
-        },
-        {
-          title: "Design",
-          description:
-            "Detailed engineering, system design, and comprehensive project documentation",
-          image:
-            "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?auto=format&fit=crop&q=80&w=1200",
-        },
-        {
-          title: "Integration",
-          description:
-            "Power evacuation planning, grid connectivity design, and system integration",
-          image:
-            "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=1200",
-        },
-        {
-          title: "Validation",
-          description:
-            "Design review, technical validation, and regulatory compliance verification",
-          image:
-            "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&q=80&w=1200",
-        },
-      ],
-    },
-  );
+  const { data } = useSectionData<any>("engineering-services", "ProcessSection");
   const steps = (data.stepsList || []).map((step: any, i: number) => ({
     ...step,
     icon: processIcons[i % processIcons.length] || SearchIcon,
@@ -743,23 +614,7 @@ function ProcessSection() {
 }
 // Stats Section
 function StatsSection() {
-  const { data } = useSectionData<any>("engineering-services", "StatsSection", {
-    heading: "Engineering Impact",
-    subheading:
-      "Delivering measurable results through technical excellence and precision engineering",
-    stat1Value: 500,
-    stat1Suffix: "+",
-    stat1Label: "Projects Engineered",
-    stat2Value: 8000,
-    stat2Suffix: "+ MW",
-    stat2Label: "Capacity Designed",
-    stat3Value: 23,
-    stat3Suffix: "+",
-    stat3Label: "Countries Served",
-    stat4Value: 99.2,
-    stat4Suffix: "%",
-    stat4Label: "Design Accuracy",
-  });
+  const { data } = useSectionData<any>("engineering-services", "StatsSection");
   const stats = [
     {
       value: data.stat1Value,
@@ -850,25 +705,7 @@ function StatsSection() {
 }
 // Featured Project Section
 function FeaturedProjectSection() {
-  const { data } = useSectionData<any>(
-    "engineering-services",
-    "FeaturedProjectSection",
-    {
-      tagline: "Featured Project",
-      heading: "Engineering Excellence in Action",
-      projectImage:
-        "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&q=80&w=2400",
-      projectTitle: "The Obra 'C' Thermal Success",
-      description:
-        "Complete engineering services for a 2x660 MW supercritical thermal power plant in Uttar Pradesh, delivering comprehensive design, system integration, and technical validation.",
-      metric1Value: "1,320 MW",
-      metric1Label: "Total Capacity",
-      metric2Value: "Supercritical",
-      metric2Label: "Technology",
-      metric3Value: "On Schedule",
-      metric3Label: "Delivery",
-    },
-  );
+  const { data } = useSectionData<any>("engineering-services", "FeaturedProjectSection");
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 2000], [0, -100]);
   return (
@@ -1010,34 +847,7 @@ function FeaturedProjectSection() {
 }
 // Value Delivered Section
 function ValueSection() {
-  const { data } = useSectionData<any>("engineering-services", "ValueSection", {
-    tagline: "Value Delivered",
-    heading: "Engineering Value",
-    subheading:
-      "Our engineering approach delivers measurable value through risk reduction, performance optimization, and technical excellence.",
-    valuesList: [
-      {
-        title: "Reduced Project Risk",
-        description:
-          "Accurate planning and technical validation minimize execution risks and costly delays",
-      },
-      {
-        title: "Optimized System Design",
-        description:
-          "Performance-focused engineering ensures maximum efficiency and reliability",
-      },
-      {
-        title: "Strong Technical Foundation",
-        description:
-          "Comprehensive documentation and design reviews support seamless execution",
-      },
-      {
-        title: "Regulatory Compliance",
-        description:
-          "Designs meet all applicable standards and regulatory requirements",
-      },
-    ],
-  });
+  const { data } = useSectionData<any>("engineering-services", "ValueSection");
   const values = (data.valuesList || []).map((value: any, i: number) => ({
     ...value,
     icon: valueIcons[i % valueIcons.length] || ShieldCheckIcon,
@@ -1119,40 +929,7 @@ function ValueSection() {
 }
 // Related Services Section
 function RelatedServicesSection() {
-  const { data } = useSectionData<any>(
-    "engineering-services",
-    "RelatedServicesSection",
-    {
-      tagline: "Related Services",
-      heading: "Explore More Services",
-      services: [
-        {
-          title: "Project Management",
-          description:
-            "Structured planning, coordination, and control across all project phases",
-          link: "/services/project-management",
-          image:
-            "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=1200",
-        },
-        {
-          title: "EPC & Construction",
-          description:
-            "Execution support across engineering, procurement, and construction",
-          link: "/services",
-          image:
-            "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=1200",
-        },
-        {
-          title: "O&M Services",
-          description:
-            "Long-term operational excellence and performance optimization",
-          link: "/services",
-          image:
-            "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?auto=format&fit=crop&q=80&w=1200",
-        },
-      ],
-    },
-  );
+  const { data } = useSectionData<any>("engineering-services", "RelatedServicesSection");
   const services = data.services || [];
 
   return (
@@ -1250,15 +1027,7 @@ function RelatedServicesSection() {
 }
 // CTA Section
 function CTASection() {
-  const { data } = useSectionData<any>("engineering-services", "CTASection", {
-    heading: "Ready to Start Your Engineering Project?",
-    description:
-      "Let our engineering team help you build a strong technical foundation for your energy infrastructure project.",
-    primaryBtnLabel: "Get Started",
-    primaryBtnUrl: "/contact",
-    secondaryBtnLabel: "View All Services",
-    secondaryBtnUrl: "/services",
-  });
+  const { data } = useSectionData<any>("engineering-services", "CTASection");
   return (
     <section className="py-32 bg-neutral-900 text-white relative overflow-hidden">
       {/* Background Glow */}

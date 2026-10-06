@@ -19,13 +19,7 @@ import { useSEO } from "../../hooks/useSEO";
 const pgFeatureIconMap = [ZapIcon, PlaneIcon, DatabaseIcon];
 
 function StewardshipHero() {
-  const { data } = useSectionData<any>("power-generation", "StewardshipHero", {
-    label: "Asset Stewardship (O&M)",
-    headingPart1: "Operating With An ",
-    headingHighlight: "Owner's Mindset",
-    description:
-      "We don't just \"maintain\" plants; we steward them. By adopting the owner's perspective, we focus on reliability, risk management, and long-term health, ensuring that every megawatt produced is optimized.",
-  });
+  const { data } = useSectionData<any>("power-generation", "StewardshipHero");
   return (
     <section className="relative min-h-[90vh] w-full bg-neutral-900 text-white overflow-hidden flex items-center pt-20">
       <div className="absolute inset-0 opacity-30">
@@ -92,29 +86,7 @@ function StewardshipHero() {
   );
 }
 function StewardshipFeatures() {
-  const { data } = useSectionData<any>(
-    "power-generation",
-    "StewardshipFeatures",
-    {
-      featuresList: [
-        {
-          title: "Thermal & Supercritical Mastery",
-          description:
-            "We manage some of India’s largest facilities, such as the 2x700 MW supercritical plant at Rajpura, with a focus on zero-error operations and maximum availability.",
-        },
-        {
-          title: "Airport Utility Management",
-          description:
-            "We are the silent force behind international hubs like DIAL, managing critical high-voltage assets, fire safety, and mechanical systems to ensure uninterrupted operations.",
-        },
-        {
-          title: "Integrated ERP Support",
-          description:
-            "All our sites are linked via a single ERP system, providing central project management and inventory support from our Noida headquarters for seamless operations.",
-        },
-      ],
-    },
-  );
+  const { data } = useSectionData<any>("power-generation", "StewardshipFeatures");
   const features = (data.featuresList || []).map((f: any, i: number) => ({
     ...f,
     icon: pgFeatureIconMap[i] || ZapIcon,
@@ -161,18 +133,7 @@ function StewardshipFeatures() {
   );
 }
 function StewardshipPhilosophy() {
-  const { data } = useSectionData<any>(
-    "power-generation",
-    "StewardshipPhilosophy",
-    {
-      headingPart1: "The Difference Between ",
-      headingHighlight: "Maintenance & Stewardship",
-      para1:
-        "Maintenance is reactive; stewardship is proactive. As one of India's top five O&M specialists, we take total responsibility for the health of your assets.",
-      para2:
-        "Our approach integrates predictive diagnostics, rigorous safety protocols, and continuous performance optimization. We don't just fix what's broken; we prevent failures before they occur, maximizing the lifespan and profitability of your infrastructure.",
-    },
-  );
+  const { data } = useSectionData<any>("power-generation", "StewardshipPhilosophy");
   return (
     <section className="py-28 bg-neutral-900 text-white">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
@@ -260,13 +221,7 @@ function StewardshipPhilosophy() {
   );
 }
 function StewardshipCTA() {
-  const { data } = useSectionData<any>("power-generation", "CTASection", {
-    heading: "Experience True Stewardship",
-    description:
-      "Let us take responsibility for your assets so you can focus on your core business.",
-    ctaLabel: "Partner With Us",
-    ctaUrl: "/contact",
-  });
+  const { data } = useSectionData<any>("power-generation", "CTASection");
   return (
     <section className="py-32 bg-white text-center">
       <div className="max-w-4xl mx-auto px-6">

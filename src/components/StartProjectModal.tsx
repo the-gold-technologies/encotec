@@ -10,22 +10,7 @@ interface StartProjectModalProps {
 }
 
 export function StartProjectModal({ isOpen, onClose }: StartProjectModalProps) {
-  const { data } = useSectionData<any>("contact", "ContactInfo", {
-    formHeading: "Send us a message",
-    fullNameLabel: "Full Name *",
-    fullNamePlaceholder: "John Doe",
-    emailAddressLabel: "Email Address *",
-    emailAddressPlaceholder: "john@company.com",
-    phoneNumberLabel: "Phone Number",
-    phoneNumberPlaceholder: "+1 (555) 000-0000",
-    companyNameLabel: "Company Name",
-    companyNamePlaceholder: "Company Ltd.",
-    subjectLabel: "Subject *",
-    selectSubjectDefault: "Select a subject",
-    messageLabel: "Message *",
-    messagePlaceholder: "How can we help you?",
-    submitButtonLabel: "Send Message",
-  });
+  const { data } = useSectionData<any>("contact", "ContactInfo");
 
   const [selectedService, setSelectedService] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -185,7 +170,7 @@ export function StartProjectModal({ isOpen, onClose }: StartProjectModalProps) {
                       id="modal-fullName"
                       required
                       className="w-full px-6 py-4 bg-neutral-50 border border-neutral-200 focus:outline-none focus:border-brand-pink focus:ring-1 focus:ring-brand-pink transition-all duration-300"
-                      placeholder={data.fullNamePlaceholder || "John Doe"}
+                      placeholder={data.fullNamePlaceholder || ""}
                     />
                   </div>
                   <div className="space-y-2">
@@ -200,9 +185,7 @@ export function StartProjectModal({ isOpen, onClose }: StartProjectModalProps) {
                       id="modal-email"
                       required
                       className="w-full px-6 py-4 bg-neutral-50 border border-neutral-200 focus:outline-none focus:border-brand-pink focus:ring-1 focus:ring-brand-pink transition-all duration-300"
-                      placeholder={
-                        data.emailAddressPlaceholder || "john@company.com"
-                      }
+                      placeholder={data.emailAddressPlaceholder || ""}
                     />
                   </div>
                 </div>
@@ -219,9 +202,7 @@ export function StartProjectModal({ isOpen, onClose }: StartProjectModalProps) {
                       type="tel"
                       id="modal-phone"
                       className="w-full px-6 py-4 bg-neutral-50 border border-neutral-200 focus:outline-none focus:border-brand-pink focus:ring-1 focus:ring-brand-pink transition-all duration-300"
-                      placeholder={
-                        data.phoneNumberPlaceholder || "+1 (555) 000-0000"
-                      }
+                      placeholder={data.phoneNumberPlaceholder || ""}
                     />
                   </div>
                   <div className="space-y-2">
@@ -235,9 +216,7 @@ export function StartProjectModal({ isOpen, onClose }: StartProjectModalProps) {
                       type="text"
                       id="modal-company"
                       className="w-full px-6 py-4 bg-neutral-50 border border-neutral-200 focus:outline-none focus:border-brand-pink focus:ring-1 focus:ring-brand-pink transition-all duration-300"
-                      placeholder={
-                        data.companyNamePlaceholder || "Company Ltd."
-                      }
+                      placeholder={data.companyNamePlaceholder || ""}
                     />
                   </div>
                 </div>
@@ -343,9 +322,7 @@ export function StartProjectModal({ isOpen, onClose }: StartProjectModalProps) {
                     required
                     rows={4}
                     className="w-full px-6 py-4 bg-neutral-50 border border-neutral-200 focus:outline-none focus:border-brand-pink focus:ring-1 focus:ring-brand-pink transition-all duration-300 resize-none"
-                    placeholder={
-                      data.messagePlaceholder || "How can we help you?"
-                    }
+                    placeholder={data.messagePlaceholder || ""}
                   ></textarea>
                 </div>
 
