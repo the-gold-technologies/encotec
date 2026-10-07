@@ -85,11 +85,24 @@ function StewardshipHero() {
     </section>
   );
 }
+const pgIconMap: Record<string, any> = {
+  Zap: ZapIcon,
+  Plane: PlaneIcon,
+  Database: DatabaseIcon,
+  ShieldCheck: ShieldCheckIcon,
+  Settings: SettingsIcon,
+  Activity: ActivityIcon,
+};
+
 function StewardshipFeatures() {
-  const { data } = useSectionData<any>("power-generation", "StewardshipFeatures");
-  const features = (data.featuresList || []).map((f: any, i: number) => ({
+  const { data } = useSectionData<any>(
+    "power-generation",
+    "StewardshipFeatures",
+  );
+  const featureList = data.features || data.featuresList || [];
+  const features = featureList.map((f: any, i: number) => ({
     ...f,
-    icon: pgFeatureIconMap[i] || ZapIcon,
+    icon: pgIconMap[f.icon] || pgFeatureIconMap[i] || ZapIcon,
   }));
 
   return (
@@ -133,7 +146,31 @@ function StewardshipFeatures() {
   );
 }
 function StewardshipPhilosophy() {
-  const { data } = useSectionData<any>("power-generation", "StewardshipPhilosophy");
+  const { data } = useSectionData<any>(
+    "power-generation",
+    "StewardshipPhilosophy",
+  );
+  const paragraphs = Array.isArray(data.paragraphs)
+    ? data.paragraphs
+    : [data.para1, data.para2].filter(Boolean);
+
+  const items =
+    Array.isArray(data.items) && data.items.length > 0
+      ? data.items
+      : [
+          { title: "Zero-Error Focus", icon: "ShieldCheck" },
+          { title: "Predictive Diagnostics", icon: "Activity" },
+          { title: "Centralized ERP", icon: "Database" },
+          { title: "24/7 Monitoring", icon: "Settings" },
+        ];
+
+  const philosophyIconMap: Record<string, any> = {
+    ShieldCheck: ShieldCheckIcon,
+    Activity: ActivityIcon,
+    Database: DatabaseIcon,
+    Settings: SettingsIcon,
+  };
+
   return (
     <section className="py-28 bg-neutral-900 text-white">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
@@ -166,8 +203,9 @@ function StewardshipPhilosophy() {
               )}
             </h2>
             <div className="space-y-6 text-lg text-neutral-400 leading-relaxed">
-              <p>{data.para1}</p>
-              <p>{data.para2}</p>
+              {paragraphs.map((p: string, i: number) => (
+                <p key={i}>{p}</p>
+              ))}
             </div>
           </motion.div>
 
@@ -188,32 +226,18 @@ function StewardshipPhilosophy() {
             }}
             className="grid grid-cols-1 sm:grid-cols-2 gap-6"
           >
-            {[
-              {
-                title: "Zero-Error Focus",
-                icon: ShieldCheckIcon,
-              },
-              {
-                title: "Predictive Diagnostics",
-                icon: ActivityIcon,
-              },
-              {
-                title: "Centralized ERP",
-                icon: DatabaseIcon,
-              },
-              {
-                title: "24/7 Monitoring",
-                icon: SettingsIcon,
-              },
-            ].map((item, i) => (
-              <div
-                key={i}
-                className="bg-white/5 backdrop-blur-sm border border-white/10 p-6 flex flex-col items-center text-center hover:bg-white/10 transition-colors duration-300"
-              >
-                <item.icon className="text-brand-pink mb-4" size={32} />
-                <div className="font-bold">{item.title}</div>
-              </div>
-            ))}
+            {items.map((item: any, i: number) => {
+              const Icon = philosophyIconMap[item.icon] || ShieldCheckIcon;
+              return (
+                <div
+                  key={i}
+                  className="bg-white/5 backdrop-blur-sm border border-white/10 p-6 flex flex-col items-center text-center hover:bg-white/10 transition-colors duration-300"
+                >
+                  <Icon className="text-brand-pink mb-4" size={32} />
+                  <div className="font-bold">{item.title}</div>
+                </div>
+              );
+            })}
           </motion.div>
         </div>
       </div>

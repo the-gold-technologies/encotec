@@ -17,7 +17,7 @@ import { useSEO } from "../../hooks/useSEO";
 const airportFeatureIconMap = [ActivityIcon, FileCheckIcon, RefreshCwIcon];
 
 function DueDiligenceHero() {
-  const { data } = useSectionData<any>("airport-services", "DueDiligenceHero");
+  const { data } = useSectionData<any>("due-diligence", "DueDiligenceHero");
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 500], [0, 150]);
   const opacity = useTransform(scrollY, [0, 300], [1, 0.3]);
@@ -92,7 +92,7 @@ function DueDiligenceHero() {
   );
 }
 function HealthFeatures() {
-  const { data } = useSectionData<any>("airport-services", "HealthFeatures");
+  const { data } = useSectionData<any>("due-diligence", "HealthFeatures");
   const features = (data.features || data.featuresList || []).map(
     (f: any, i: number) => ({
       ...f,
@@ -141,7 +141,7 @@ function HealthFeatures() {
   );
 }
 function ValueProtection() {
-  const { data } = useSectionData<any>("airport-services", "ValueProtection");
+  const { data } = useSectionData<any>("due-diligence", "ValueProtection");
 
   const paragraphs = data.paragraphs || [];
   const bullets = data.bullets || [];
@@ -217,7 +217,7 @@ function ValueProtection() {
   );
 }
 function CTASection() {
-  const { data } = useSectionData<any>("airport-services", "CTASection");
+  const { data } = useSectionData<any>("due-diligence", "CTASection");
   return (
     <section className="py-32 bg-white text-center">
       <div className="max-w-4xl mx-auto px-6">
@@ -239,7 +239,7 @@ function CTASection() {
   );
 }
 export function AirportServices() {
-  useSEO("service/airport-services");
+  useSEO("service/due-diligence");
 
   return (
     <main className="w-full bg-white min-h-screen overflow-x-hidden selection:bg-brand-pink selection:text-white">

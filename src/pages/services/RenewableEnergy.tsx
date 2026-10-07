@@ -15,7 +15,7 @@ import { useSEO } from "../../hooks/useSEO";
 const reFeatureIconMap = [SearchIcon, ActivityIcon, TrendingUpIcon];
 
 function AdvisoryHero() {
-  const { data } = useSectionData<any>("renewable-energy", "AdvisoryHero");
+  const { data } = useSectionData<any>("technical-advisory", "AdvisoryHero");
   return (
     <section className="relative min-h-[90vh] w-full bg-neutral-900 text-white overflow-hidden flex items-center pt-20">
       <div className="absolute inset-0 opacity-20">
@@ -83,7 +83,7 @@ function AdvisoryHero() {
   );
 }
 function AdvisoryFeatures() {
-  const { data } = useSectionData<any>("renewable-energy", "AdvisoryFeatures");
+  const { data } = useSectionData<any>("technical-advisory", "AdvisoryFeatures");
   const features = (data.features || data.featuresList || []).map(
     (f: any, i: number) => ({ ...f, icon: reFeatureIconMap[i] || SearchIcon }),
   );
@@ -129,7 +129,7 @@ function AdvisoryFeatures() {
   );
 }
 function DiagnosticProcess() {
-  const { data } = useSectionData<any>("renewable-energy", "DiagnosticProcess");
+  const { data } = useSectionData<any>("technical-advisory", "DiagnosticProcess");
   const steps = data.steps || [];
 
   return (
@@ -194,7 +194,7 @@ function DiagnosticProcess() {
   );
 }
 function AdvisoryCTA() {
-  const { data } = useSectionData<any>("renewable-energy", "CTASection");
+  const { data } = useSectionData<any>("technical-advisory", "CTASection");
   return (
     <section className="py-32 bg-white text-center">
       <div className="max-w-4xl mx-auto px-6">
@@ -214,7 +214,7 @@ function AdvisoryCTA() {
   );
 }
 export function RenewableEnergy() {
-  useSEO("service/renewable-energy");
+  useSEO("service/technical-advisory");
 
   return (
     <main className="w-full bg-white min-h-screen overflow-x-hidden selection:bg-brand-pink selection:text-white">
