@@ -8,13 +8,25 @@ import {
   ClipboardCheckIcon,
   WrenchIcon,
   SearchIcon,
+  ShieldCheckIcon,
+  ActivityIcon,
 } from "lucide-react";
 import { useSectionData } from "../../store/useCMSStore";
 
+const iconMap: Record<string, any> = {
+  Flame: FlameIcon,
+  ClipboardCheck: ClipboardCheckIcon,
+  Network: NetworkIcon,
+  Search: SearchIcon,
+  Wrench: WrenchIcon,
+  ShieldCheck: ShieldCheckIcon,
+  Activity: ActivityIcon,
+};
+
 const servicesIcons = [
-  ClipboardCheckIcon,
-  NetworkIcon,
   FlameIcon,
+  ClipboardCheckIcon,
+  ShieldCheckIcon,
   SearchIcon,
   WrenchIcon,
 ];
@@ -24,7 +36,10 @@ export function Services() {
   const rawList = data.services || [];
   const services = rawList.map((service: any, i: number) => ({
     ...service,
-    icon: servicesIcons[i % servicesIcons.length] || ClipboardCheckIcon,
+    icon:
+      (service.icon && iconMap[service.icon]) ||
+      servicesIcons[i % servicesIcons.length] ||
+      ClipboardCheckIcon,
   }));
 
   return (

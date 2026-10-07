@@ -35,7 +35,9 @@ export function App() {
     // 1. Apply Favicon (with public/febIcon.png fallback)
     const publicFavicon = "/febIcon.png";
     const applyFavicon = (href: string) => {
-      document.querySelectorAll("link[rel*='icon']").forEach((el) => el.remove());
+      document
+        .querySelectorAll("link[rel*='icon']")
+        .forEach((el) => el.remove());
 
       const faviconLink = document.createElement("link");
       faviconLink.rel = "icon";
@@ -55,7 +57,9 @@ export function App() {
         applyFavicon(globalSEO.favicon!);
       };
       img.onerror = () => {
-        console.warn("CMS Favicon URL failed to load. Falling back to public /febIcon.png");
+        console.warn(
+          "CMS Favicon URL failed to load. Falling back to public /febIcon.png",
+        );
         applyFavicon(publicFavicon);
       };
       img.src = globalSEO.favicon;
@@ -187,19 +191,16 @@ export function App() {
         />
 
         <Route
-          path="/services/transmission-distribution"
+          path="/services/construction-commissioning"
           element={<TransmissionDistribution />}
         />
 
         <Route
-          path="/services/renewable-energy"
+          path="/services/technical-advisory"
           element={<RenewableEnergy />}
         />
 
-        <Route
-          path="/services/airport-services"
-          element={<AirportServices />}
-        />
+        <Route path="/services/due-diligence" element={<AirportServices />} />
 
         <Route path="/services/value-added" element={<ValueAddedServices />} />
         <Route path="/insights" element={<Insights />} />

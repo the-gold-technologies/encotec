@@ -59,18 +59,7 @@ function AnimatedCounter({
   );
 }
 function ProjectHero() {
-  const { data } = useSectionData<any>("project-management", "ProjectHero", {
-    label: "Project Conceptualisation & Development",
-    headingPart1: "Building Your Vision on a ",
-    headingHighlight: "Logical Foundation",
-    description:
-      "A great project doesn't start with a shovel in the ground; it starts with a logical, well-vetted plan. We are your strategic developers who ensure your project is technically sound and financially viable from day one.",
-    floatingBadges: [
-      { text: "Pre-Feasibility", icon: "Map" },
-      { text: "DPR Creation", icon: "FileText" },
-      { text: "EPC Selection", icon: "Briefcase" },
-    ],
-  });
+  const { data } = useSectionData<any>("project-management", "ProjectHero");
   return (
     <section className="relative min-h-[90vh] w-full bg-neutral-900 text-white overflow-hidden flex items-center pt-20">
       {/* Strategic Grid Pattern */}
@@ -205,18 +194,7 @@ function ProjectHero() {
   );
 }
 function PhilosophySection() {
-  const { data } = useSectionData<any>(
-    "project-management",
-    "PhilosophySection",
-    {
-      headingPart1: "Not Just Detailed Engineering. ",
-      headingHighlight: "Strategic Development.",
-      para1:
-        'We are not a "detailed engineering" firm that gets lost in the minutiae. We understand that the earliest decisions in a project\'s lifecycle have the most profound impact on its ultimate success.',
-      para2:
-        'By adopting an "Owner\'s Mindset" from the very beginning, we evaluate site conditions, resource potential, and financial models to ensure your investment is built on reality, not just theory. We provide the clarity required for stakeholder confidence and project approval.',
-    },
-  );
+  const { data } = useSectionData<any>("project-management", "PhilosophySection");
   return (
     <section className="py-28 bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
@@ -316,28 +294,7 @@ function PhilosophySection() {
   );
 }
 function CoreOfferings() {
-  const { data } = useSectionData<any>("project-management", "CoreOfferings", {
-    heading: "Our Development Services",
-    description:
-      "End-to-end conceptualisation to ensure your project starts strong.",
-    offeringsList: [
-      {
-        title: "Feasibility & Pre-Feasibility Studies",
-        description:
-          "We evaluate site conditions and resource potential to ensure your investment is built on reality, not just theory. Our comprehensive studies cover technical, economic, and environmental factors.",
-      },
-      {
-        title: "Detailed Project Reports (DPR)",
-        description:
-          "We provide the technical and financial clarity required for stakeholder confidence and project approval. Our DPRs serve as the definitive blueprint for project execution and financing.",
-      },
-      {
-        title: "Strategic Sourcing & EPC Selection",
-        description:
-          "We develop rigorous technical specifications and help you finalise EPC contractors, ensuring you have the right partners by your side. We manage the entire tendering and evaluation process.",
-      },
-    ],
-  });
+  const { data } = useSectionData<any>("project-management", "CoreOfferings");
   const offerings = (data.offeringsList || []).map((o: any, i: number) => ({
     ...o,
     icon: pmOfferingIconMap[i] || FileTextIcon,
@@ -403,13 +360,7 @@ function CoreOfferings() {
   );
 }
 function StatsSection() {
-  const { data } = useSectionData<any>("project-management", "StatsSection", {
-    stats: [
-      { value: 8000, suffix: "+", label: "MW Conceptualised" },
-      { value: 100, suffix: "%", label: "Owner's Mindset" },
-      { value: 300, suffix: "+", label: "Specialized Engineers" },
-    ],
-  });
+  const { data } = useSectionData<any>("project-management", "StatsSection");
   const stats = data.stats || [];
   return (
     <section className="py-20 bg-brand-pink text-white">
@@ -447,13 +398,7 @@ function StatsSection() {
   );
 }
 function CTASection() {
-  const { data } = useSectionData<any>("project-management", "CTASection", {
-    heading: "Ready to Build Your Vision?",
-    description:
-      "Let's start your project on a logical foundation with our expert conceptualisation and development services.",
-    ctaLabel: "Start the Conversation",
-    ctaUrl: "/contact",
-  });
+  const { data } = useSectionData<any>("project-management", "CTASection");
   return (
     <section className="py-32 bg-white text-center">
       <div className="max-w-4xl mx-auto px-6">

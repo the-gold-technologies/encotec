@@ -51,9 +51,9 @@ const slugMap: Record<string, string> = {
   "service/engineering": "engineering-services",
   "service/project-management": "project-management",
   "service/power-generation": "power-generation",
-  "service/transmission-distribution": "transmission-distribution",
-  "service/renewable-energy": "renewable-energy",
-  "service/airport-services": "airport-services",
+  "service/construction-commissioning": "construction-commissioning",
+  "service/technical-advisory": "technical-advisory",
+  "service/due-diligence": "due-diligence",
   "service/value-added": "value-added",
 };
 

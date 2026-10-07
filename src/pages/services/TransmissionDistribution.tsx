@@ -21,17 +21,7 @@ import { useSEO } from "../../hooks/useSEO";
 const tdCapIconMap = [HardHatIcon, FileCheckIcon, RefreshCwIcon];
 
 function ConstructionHero() {
-  const { data } = useSectionData<any>(
-    "transmission-distribution",
-    "ConstructionHero",
-    {
-      label: "Construction, Commissioning & Relocation",
-      headingPart1: "Bringing Complex ",
-      headingHighlight: "Infrastructure to Life",
-      description:
-        'At Encotec, we thrive on the challenge of "physical realization". From the massive IBR piping of a thermal plant to the precision mounting of solar modules, we bring your assets online with speed and safety.',
-    },
-  );
+  const { data } = useSectionData<any>("construction-commissioning", "ConstructionHero");
   return (
     <section className="relative min-h-[90vh] w-full bg-neutral-900 text-white overflow-hidden flex items-center pt-20">
       {/* Blueprint Grid Pattern */}
@@ -126,32 +116,7 @@ function ConstructionHero() {
 }
 
 function CapabilitiesSection() {
-  const { data } = useSectionData<any>(
-    "transmission-distribution",
-    "CapabilitiesSection",
-    {
-      heading: "Physical Realization at Scale",
-      description:
-        "Whether it's a new build or moving an entire plant across borders, we handle the complex installation and synchronization of your assets.",
-      capabilitiesList: [
-        {
-          title: "Multi-Sector Expertise",
-          description:
-            "We have delivered construction excellence across thermal power, solar PV, and wind projects globally. Our teams handle everything from civil works to complex mechanical erection.",
-        },
-        {
-          title: "Technical Due Diligence",
-          description:
-            "We provide independent technical audits for plant acquisitions, helping you understand the true value, operational risks, and hidden costs of an investment.",
-        },
-        {
-          title: "Restoration Strategy",
-          description:
-            "For older plants, we provide comprehensive revamping and restoration plans to improve performance, extend lifecycle, and meet environmental standards.",
-        },
-      ],
-    },
-  );
+  const { data } = useSectionData<any>("construction-commissioning", "CapabilitiesSection");
   const capabilities = (data.capabilities || data.capabilitiesList || []).map(
     (c: any, i: number) => ({ ...c, icon: tdCapIconMap[i] || HardHatIcon }),
   );
@@ -220,26 +185,7 @@ function CapabilitiesSection() {
 }
 
 function ValueProtection() {
-  const { data } = useSectionData<any>(
-    "transmission-distribution",
-    "ValueProtection",
-    {
-      headingPart1: "Protecting Your ",
-      headingHighlight: "Investment",
-      bulletHeading: "What We Evaluate",
-      paragraphs: [
-        "Acquiring or relocating an industrial asset involves significant capital risk. Without a clear understanding of the asset's true condition, you may be inheriting expensive liabilities.",
-        "Our independent technical audits provide the objective data you need to negotiate effectively, plan capital expenditures accurately, and ensure that your investment will deliver the expected returns over its intended lifecycle.",
-      ],
-      bullets: [
-        "Structural integrity and material degradation",
-        "Historical O&M records and failure analysis",
-        "Environmental compliance and emissions",
-        "Control system obsolescence",
-        "Thermodynamic performance baseline",
-      ],
-    },
-  );
+  const { data } = useSectionData<any>("construction-commissioning", "ValueProtection");
 
   const paragraphs = data.paragraphs || [];
   const bullets = data.bullets || [];
@@ -316,28 +262,7 @@ function ValueProtection() {
 }
 
 function ProcessFlow() {
-  const { data } = useSectionData<any>(
-    "transmission-distribution",
-    "ProcessFlow",
-    {
-      headingPart1: "The Relocation ",
-      headingHighlight: "Advantage",
-      description:
-        "Asset relocation is a highly specialized service that requires meticulous planning, precise execution, and deep engineering knowledge. Encotec is one of the few global providers with a proven track record in cross-border plant relocations.",
-      bullets: [
-        "Detailed dismantling protocols and tagging",
-        "Logistics planning and customs clearance support",
-        "Refurbishment of critical components during transit",
-        "Re-erection and synchronization at the new site",
-      ],
-      steps: [
-        { title: "Dismantle", desc: "Precision teardown", icon: "Settings" },
-        { title: "Transport", desc: "Global logistics", icon: "Truck" },
-        { title: "Erect", desc: "Expert installation", icon: "HardHat" },
-        { title: "Commission", desc: "Grid sync & testing", icon: "Zap" },
-      ],
-    },
-  );
+  const { data } = useSectionData<any>("construction-commissioning", "ProcessFlow");
   const bullets: string[] = data.bullets || [];
   const steps: any[] = data.steps || [];
 
@@ -437,17 +362,7 @@ function ProcessFlow() {
 }
 
 function CTASection() {
-  const { data } = useSectionData<any>(
-    "transmission-distribution",
-    "CTASection",
-    {
-      heading: "Planning an Acquisition or Relocation?",
-      description:
-        "Get the technical truth about your assets before you make a decision.",
-      ctaLabel: "Request an Assessment",
-      ctaUrl: "/contact",
-    },
-  );
+  const { data } = useSectionData<any>("construction-commissioning", "CTASection");
   return (
     <section className="py-32 bg-white text-center">
       <div className="max-w-4xl mx-auto px-6">
@@ -468,7 +383,7 @@ function CTASection() {
 }
 
 export function TransmissionDistribution() {
-  useSEO("service/transmission-distribution");
+  useSEO("service/construction-commissioning");
 
   return (
     <main className="w-full bg-white min-h-screen overflow-x-hidden selection:bg-brand-pink selection:text-white">

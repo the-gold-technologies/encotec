@@ -19,13 +19,7 @@ import { useSEO } from "../../hooks/useSEO";
 const pgFeatureIconMap = [ZapIcon, PlaneIcon, DatabaseIcon];
 
 function StewardshipHero() {
-  const { data } = useSectionData<any>("power-generation", "StewardshipHero", {
-    label: "Asset Stewardship (O&M)",
-    headingPart1: "Operating With An ",
-    headingHighlight: "Owner's Mindset",
-    description:
-      "We don't just \"maintain\" plants; we steward them. By adopting the owner's perspective, we focus on reliability, risk management, and long-term health, ensuring that every megawatt produced is optimized.",
-  });
+  const { data } = useSectionData<any>("power-generation", "StewardshipHero");
   return (
     <section className="relative min-h-[90vh] w-full bg-neutral-900 text-white overflow-hidden flex items-center pt-20">
       <div className="absolute inset-0 opacity-30">
@@ -91,33 +85,24 @@ function StewardshipHero() {
     </section>
   );
 }
+const pgIconMap: Record<string, any> = {
+  Zap: ZapIcon,
+  Plane: PlaneIcon,
+  Database: DatabaseIcon,
+  ShieldCheck: ShieldCheckIcon,
+  Settings: SettingsIcon,
+  Activity: ActivityIcon,
+};
+
 function StewardshipFeatures() {
   const { data } = useSectionData<any>(
     "power-generation",
     "StewardshipFeatures",
-    {
-      featuresList: [
-        {
-          title: "Thermal & Supercritical Mastery",
-          description:
-            "We manage some of India’s largest facilities, such as the 2x700 MW supercritical plant at Rajpura, with a focus on zero-error operations and maximum availability.",
-        },
-        {
-          title: "Airport Utility Management",
-          description:
-            "We are the silent force behind international hubs like DIAL, managing critical high-voltage assets, fire safety, and mechanical systems to ensure uninterrupted operations.",
-        },
-        {
-          title: "Integrated ERP Support",
-          description:
-            "All our sites are linked via a single ERP system, providing central project management and inventory support from our Noida headquarters for seamless operations.",
-        },
-      ],
-    },
   );
-  const features = (data.featuresList || []).map((f: any, i: number) => ({
+  const featureList = data.features || data.featuresList || [];
+  const features = featureList.map((f: any, i: number) => ({
     ...f,
-    icon: pgFeatureIconMap[i] || ZapIcon,
+    icon: pgIconMap[f.icon] || pgFeatureIconMap[i] || ZapIcon,
   }));
 
   return (
@@ -164,15 +149,28 @@ function StewardshipPhilosophy() {
   const { data } = useSectionData<any>(
     "power-generation",
     "StewardshipPhilosophy",
-    {
-      headingPart1: "The Difference Between ",
-      headingHighlight: "Maintenance & Stewardship",
-      para1:
-        "Maintenance is reactive; stewardship is proactive. As one of India's top five O&M specialists, we take total responsibility for the health of your assets.",
-      para2:
-        "Our approach integrates predictive diagnostics, rigorous safety protocols, and continuous performance optimization. We don't just fix what's broken; we prevent failures before they occur, maximizing the lifespan and profitability of your infrastructure.",
-    },
   );
+  const paragraphs = Array.isArray(data.paragraphs)
+    ? data.paragraphs
+    : [data.para1, data.para2].filter(Boolean);
+
+  const items =
+    Array.isArray(data.items) && data.items.length > 0
+      ? data.items
+      : [
+          { title: "Zero-Error Focus", icon: "ShieldCheck" },
+          { title: "Predictive Diagnostics", icon: "Activity" },
+          { title: "Centralized ERP", icon: "Database" },
+          { title: "24/7 Monitoring", icon: "Settings" },
+        ];
+
+  const philosophyIconMap: Record<string, any> = {
+    ShieldCheck: ShieldCheckIcon,
+    Activity: ActivityIcon,
+    Database: DatabaseIcon,
+    Settings: SettingsIcon,
+  };
+
   return (
     <section className="py-28 bg-neutral-900 text-white">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
@@ -205,8 +203,9 @@ function StewardshipPhilosophy() {
               )}
             </h2>
             <div className="space-y-6 text-lg text-neutral-400 leading-relaxed">
-              <p>{data.para1}</p>
-              <p>{data.para2}</p>
+              {paragraphs.map((p: string, i: number) => (
+                <p key={i}>{p}</p>
+              ))}
             </div>
           </motion.div>
 
@@ -227,32 +226,18 @@ function StewardshipPhilosophy() {
             }}
             className="grid grid-cols-1 sm:grid-cols-2 gap-6"
           >
-            {[
-              {
-                title: "Zero-Error Focus",
-                icon: ShieldCheckIcon,
-              },
-              {
-                title: "Predictive Diagnostics",
-                icon: ActivityIcon,
-              },
-              {
-                title: "Centralized ERP",
-                icon: DatabaseIcon,
-              },
-              {
-                title: "24/7 Monitoring",
-                icon: SettingsIcon,
-              },
-            ].map((item, i) => (
-              <div
-                key={i}
-                className="bg-white/5 backdrop-blur-sm border border-white/10 p-6 flex flex-col items-center text-center hover:bg-white/10 transition-colors duration-300"
-              >
-                <item.icon className="text-brand-pink mb-4" size={32} />
-                <div className="font-bold">{item.title}</div>
-              </div>
-            ))}
+            {items.map((item: any, i: number) => {
+              const Icon = philosophyIconMap[item.icon] || ShieldCheckIcon;
+              return (
+                <div
+                  key={i}
+                  className="bg-white/5 backdrop-blur-sm border border-white/10 p-6 flex flex-col items-center text-center hover:bg-white/10 transition-colors duration-300"
+                >
+                  <Icon className="text-brand-pink mb-4" size={32} />
+                  <div className="font-bold">{item.title}</div>
+                </div>
+              );
+            })}
           </motion.div>
         </div>
       </div>
@@ -260,13 +245,7 @@ function StewardshipPhilosophy() {
   );
 }
 function StewardshipCTA() {
-  const { data } = useSectionData<any>("power-generation", "CTASection", {
-    heading: "Experience True Stewardship",
-    description:
-      "Let us take responsibility for your assets so you can focus on your core business.",
-    ctaLabel: "Partner With Us",
-    ctaUrl: "/contact",
-  });
+  const { data } = useSectionData<any>("power-generation", "CTASection");
   return (
     <section className="py-32 bg-white text-center">
       <div className="max-w-4xl mx-auto px-6">
