@@ -4,7 +4,6 @@ import { useCMSStore } from "./store/useCMSStore";
 import { Home } from "./pages/Home";
 import { About } from "./pages/About";
 import { Services } from "./pages/Services";
-import { EngineeringServices } from "./pages/services/EngineeringServices";
 import { ProjectManagement } from "./pages/services/ProjectManagement";
 import { PowerGeneration } from "./pages/services/PowerGeneration";
 import { TransmissionDistribution } from "./pages/services/TransmissionDistribution";
@@ -179,7 +178,6 @@ export function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/services" element={<Services />} />
-        <Route path="/services/engineering" element={<EngineeringServices />} />
         <Route
           path="/services/project-management"
           element={<ProjectManagement />}

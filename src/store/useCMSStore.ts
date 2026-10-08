@@ -48,7 +48,6 @@ interface CMSState {
 }
 
 const slugMap: Record<string, string> = {
-  "service/engineering": "engineering-services",
   "service/project-management": "project-management",
   "service/power-generation": "power-generation",
   "service/construction-commissioning": "construction-commissioning",
