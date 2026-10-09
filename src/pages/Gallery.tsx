@@ -404,9 +404,7 @@ function GalleryGrid() {
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.25 }}
                     src={currentLightboxItem.image}
-                    alt={
-                      currentLightboxItem?.title || "Encotec Project Gallery"
-                    }
+                    alt={currentLightboxItem?.title || ""}
                     className="w-full h-full object-cover"
                   />
                 )}

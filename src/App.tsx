@@ -12,6 +12,9 @@ import { AirportServices } from "./pages/services/AirportServices";
 import { ValueAddedServices } from "./pages/services/ValueAddedServices";
 import { Insights } from "./pages/Insights";
 import { InsightDetail } from "./pages/insights/InsightDetail";
+import { CaseStudiesPage } from "./pages/insights/CaseStudiesPage";
+import { NewsUpdatesPage } from "./pages/insights/NewsUpdatesPage";
+import { BlogsArticlesPage } from "./pages/insights/BlogsArticlesPage";
 import { Contact } from "./pages/Contact";
 import { Careers } from "./pages/Careers";
 import { Certifications } from "./pages/Certifications";
@@ -203,6 +206,14 @@ export function App() {
 
         <Route path="/services/value-added" element={<ValueAddedServices />} />
         <Route path="/insights" element={<Insights />} />
+        <Route path="/insights/case-studies" element={<CaseStudiesPage />} />
+        <Route path="/insights/news-updates" element={<NewsUpdatesPage />} />
+        <Route path="/insights/news" element={<NewsUpdatesPage />} />
+        <Route
+          path="/insights/blogs-articles"
+          element={<BlogsArticlesPage />}
+        />
+        <Route path="/insights/blogs" element={<BlogsArticlesPage />} />
         <Route path="/insights/:slug" element={<InsightDetail />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/careers" element={<Careers />} />
