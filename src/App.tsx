@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useCMSStore } from "./store/useCMSStore";
 import { Home } from "./pages/Home";
 import { About } from "./pages/About";
@@ -216,8 +216,8 @@ export function App() {
         <Route path="/insights/blogs" element={<BlogsArticlesPage />} />
         <Route path="/insights/:slug" element={<InsightDetail />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/careers" element={<Careers />} />
-        <Route path="/certifications" element={<Certifications />} />
+        {/* <Route path="/certifications" element={<Certifications />} /> */}
+        <Route path="/certifications" element={<Navigate to="/" replace />} />
         <Route path="/leadership" element={<Leadership />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
