@@ -48,13 +48,15 @@ interface CMSState {
 }
 
 const slugMap: Record<string, string> = {
-  "service/engineering": "engineering-services",
   "service/project-management": "project-management",
   "service/power-generation": "power-generation",
   "service/construction-commissioning": "construction-commissioning",
   "service/technical-advisory": "technical-advisory",
   "service/due-diligence": "due-diligence",
   "service/value-added": "value-added",
+  "insights/case-studies": "case-studies",
+  "insights/news-updates": "news-updates",
+  "insights/blogs-articles": "blogs-articles",
 };
 
 const reverseSlugMap: Record<string, string> = {};
@@ -212,8 +214,7 @@ export const useCMSStore = create<CMSState>((set, get) => ({
       set({
         globalSEO: {
           siteTitle: "encotec",
-          siteDescription:
-            "Engineering & Project Management Services",
+          siteDescription: "Engineering & Project Management Services",
           favicon: null,
           googleAnalyticsId: "G-CT894VPLS1",
           gtmId: "GTM-59DCSVDV",

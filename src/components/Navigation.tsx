@@ -1,15 +1,130 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import {
+  Menu,
+  X,
+  ChevronDown,
+  ArrowRight,
+  Compass,
+  HardHat,
+  Zap,
+  TrendingUp,
+  ShieldCheck,
+  Globe,
+  Settings,
+  ClipboardCheck,
+  Package,
+  Layers,
+  Wrench,
+  Activity,
+  Target,
+  FolderKanban,
+  Newspaper,
+  BookOpen,
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSectionData } from "../store/useCMSStore";
 
 interface NavigationProps {
   variant?: "light" | "dark";
 }
 
+const INSIGHTS_ITEMS = [
+  {
+    title: "Case Studies",
+    path: "/insights/case-studies",
+    desc: "Real-world engineering implementations and project outcomes.",
+    icon: FolderKanban,
+    lightBg: "bg-rose-50 text-rose-600",
+  },
+  {
+    title: "News & Updates",
+    path: "/insights/news-updates",
+    desc: "Latest corporate news, milestones, and industry announcements.",
+    icon: Newspaper,
+    lightBg: "bg-blue-50 text-blue-600",
+  },
+  {
+    title: "Blogs & Articles",
+    path: "/insights/blogs-articles",
+    desc: "Thought leadership, engineering analysis, and energy perspectives.",
+    icon: BookOpen,
+    lightBg: "bg-emerald-50 text-emerald-600",
+  },
+];
+
+const SERVICE_PATH_ICON_MAP: Record<string, any> = {
+  "/services/project-management": Compass,
+  "/services/construction-commissioning": HardHat,
+  "/services/power-generation": Zap,
+  "/services/technical-advisory": TrendingUp,
+  "/services/due-diligence": ShieldCheck,
+  "/services/value-added": Globe,
+};
+
+const ICON_MAP: Record<string, any> = {
+  Compass,
+  HardHat,
+  Zap,
+  TrendingUp,
+  ShieldCheck,
+  Globe,
+  Settings,
+  ClipboardCheck,
+  Package,
+  Layers,
+  Wrench,
+  Activity,
+  Target,
+};
+
+const BADGE_COLOR_PALETTE = [
+  "bg-rose-50 text-rose-600",
+  "bg-amber-50 text-amber-600",
+  "bg-blue-50 text-blue-600",
+  "bg-emerald-50 text-emerald-600",
+  "bg-teal-50 text-teal-600",
+  "bg-purple-50 text-purple-600",
+];
+
 export function Navigation({ variant = "light" }: NavigationProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [servicesOpen, setServicesOpen] = useState(false);
+  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
+  const [insightsOpen, setInsightsOpen] = useState(false);
+  const [mobileInsightsOpen, setMobileInsightsOpen] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const insightsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const location = useLocation();
+
+  // Fetch services dynamically from CMS CoreServices section
+  const { data: cmsServicesData } = useSectionData<any>(
+    "services",
+    "CoreServices",
+  );
+
+  const servicesList: Array<{
+    title: string;
+    path: string;
+    desc: string;
+    icon: any;
+    lightBg: string;
+  }> = Array.isArray(cmsServicesData?.services)
+    ? cmsServicesData.services.map((service: any, index: number) => {
+        const path = service.link || "/services";
+        const Icon =
+          SERVICE_PATH_ICON_MAP[path] ||
+          (service.icon && ICON_MAP[service.icon]) ||
+          Compass;
+        return {
+          title: service.title || "",
+          path: path,
+          desc: service.overview || "",
+          icon: Icon,
+          lightBg: BADGE_COLOR_PALETTE[index % BADGE_COLOR_PALETTE.length],
+        };
+      })
+    : [];
 
   // Lock body scroll when mobile menu is open
   useEffect(() => {
@@ -19,10 +134,60 @@ export function Navigation({ variant = "light" }: NavigationProps) {
     };
   }, [mobileMenuOpen]);
 
-  // Close menu on route change
+  // Close menus on route change
   useEffect(() => {
     setMobileMenuOpen(false);
+    setServicesOpen(false);
+    setInsightsOpen(false);
+    setMobileServicesOpen(false);
+    setMobileInsightsOpen(false);
   }, [location.pathname]);
+
+  // Close desktop dropdown on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setServicesOpen(false);
+        setInsightsOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  const handleMouseEnter = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+    setServicesOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => {
+      setServicesOpen(false);
+    }, 180);
+  };
+
+  const handleInsightsMouseEnter = () => {
+    if (insightsTimeoutRef.current) {
+      clearTimeout(insightsTimeoutRef.current);
+      insightsTimeoutRef.current = null;
+    }
+    setInsightsOpen(true);
+  };
+
+  const handleInsightsMouseLeave = () => {
+    if (insightsTimeoutRef.current) {
+      clearTimeout(insightsTimeoutRef.current);
+    }
+    insightsTimeoutRef.current = setTimeout(() => {
+      setInsightsOpen(false);
+    }, 180);
+  };
 
   const getLinkClass = (path: string) => {
     const isActive =
@@ -64,7 +229,7 @@ export function Navigation({ variant = "light" }: NavigationProps) {
         </Link>
 
         {/* Desktop links */}
-        <div className="hidden lg:flex items-center gap-8">
+        <div className="hidden lg:flex items-center gap-6 xl:gap-[26px]">
           <div
             className={`flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-medium ${
               variant === "dark"
@@ -81,23 +246,224 @@ export function Navigation({ variant = "light" }: NavigationProps) {
           <Link to="/about" className={getLinkClass("/about")}>
             About
           </Link>
-          <Link to="/services" className={getLinkClass("/services")}>
-            Services
-          </Link>
-          <Link to="/insights" className={getLinkClass("/insights")}>
-            Insights
-          </Link>
+
+          {/* Services with Dropdown */}
+          <div
+            className="relative flex items-center"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
+            <div
+              className={`flex items-center gap-1 py-1 transition-colors cursor-pointer ${
+                servicesOpen
+                  ? "text-brand-pink"
+                  : location.pathname.startsWith("/services")
+                    ? "text-brand-pink"
+                    : variant === "dark"
+                      ? "text-neutral-300 hover:text-white"
+                      : "text-neutral-700 hover:text-brand-pink"
+              }`}
+            >
+              <Link
+                to="/services"
+                className="text-sm font-medium"
+                onClick={() => setServicesOpen(false)}
+              >
+                Services
+              </Link>
+              <button
+                type="button"
+                onClick={() => setServicesOpen((prev) => !prev)}
+                className={`p-0.5 transition-transform duration-200 ${
+                  servicesOpen ? "rotate-180 text-brand-pink" : ""
+                }`}
+                aria-label="Toggle Services dropdown"
+              >
+                <ChevronDown size={14} />
+              </button>
+            </div>
+
+            <AnimatePresence>
+              {servicesOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -4, x: "-50%", scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, x: "-50%", scale: 1 }}
+                  exit={{ opacity: 0, y: -4, x: "-50%", scale: 0.98 }}
+                  transition={{ duration: 0.16, ease: "easeOut" }}
+                  style={{ backgroundColor: "#ffffff" }}
+                  className="absolute top-[calc(100%+36px)] left-1/2 w-[390px] p-3.5 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.18)] border border-neutral-100 z-[60]"
+                >
+                  {/* Invisible bridge over the gap to prevent mouse leave */}
+                  <div className="absolute -top-[36px] left-0 right-0 h-[36px]" />
+
+                  {/* Service Items (Single Column with Tinted Icon Badges) */}
+                  <div className="flex flex-col space-y-1">
+                    {servicesList.map((service) => {
+                      const isActive = location.pathname === service.path;
+                      const Icon = service.icon;
+                      return (
+                        <Link
+                          key={service.path}
+                          to={service.path}
+                          onClick={() => setServicesOpen(false)}
+                          className={`group flex items-center gap-3.5 p-2.5 rounded-2xl transition-all duration-150 ${
+                            isActive
+                              ? "bg-neutral-100/90 text-brand-pink"
+                              : "hover:bg-neutral-50 text-neutral-900"
+                          }`}
+                        >
+                          <div
+                            className={`w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-105 ${service.lightBg}`}
+                          >
+                            <Icon size={20} />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h4
+                              className={`text-[13.5px] font-bold leading-snug line-clamp-1 transition-colors ${
+                                isActive
+                                  ? "text-brand-pink"
+                                  : "text-neutral-900 group-hover:text-brand-pink"
+                              }`}
+                            >
+                              {service.title}
+                            </h4>
+                            <p className="text-[11.5px] text-neutral-500 leading-tight line-clamp-1 mt-0.5 font-normal">
+                              {service.desc}
+                            </p>
+                          </div>
+                        </Link>
+                      );
+                    })}
+                  </div>
+
+                  {/* Clean All Services Footer Link */}
+                  <div className="mt-2 pt-2 border-t border-neutral-100">
+                    <Link
+                      to="/services"
+                      onClick={() => setServicesOpen(false)}
+                      className="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold text-neutral-600 hover:text-brand-pink hover:bg-neutral-50 transition-colors"
+                    >
+                      <span>All Services Overview</span>
+                      <ArrowRight size={14} className="text-brand-pink" />
+                    </Link>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Insights with Dropdown */}
+          <div
+            className="relative flex items-center"
+            onMouseEnter={handleInsightsMouseEnter}
+            onMouseLeave={handleInsightsMouseLeave}
+          >
+            <div
+              className={`flex items-center gap-1 py-1 transition-colors cursor-pointer ${
+                insightsOpen
+                  ? "text-brand-pink"
+                  : location.pathname.startsWith("/insights")
+                    ? "text-brand-pink"
+                    : variant === "dark"
+                      ? "text-neutral-300 hover:text-white"
+                      : "text-neutral-700 hover:text-brand-pink"
+              }`}
+            >
+              <Link
+                to="/insights"
+                className="text-sm font-medium"
+                onClick={() => setInsightsOpen(false)}
+              >
+                Insights
+              </Link>
+              <button
+                type="button"
+                onClick={() => setInsightsOpen((prev) => !prev)}
+                className={`p-0.5 transition-transform duration-200 ${
+                  insightsOpen ? "rotate-180 text-brand-pink" : ""
+                }`}
+                aria-label="Toggle Insights dropdown"
+              >
+                <ChevronDown size={14} />
+              </button>
+            </div>
+
+            <AnimatePresence>
+              {insightsOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -4, x: "-50%", scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, x: "-50%", scale: 1 }}
+                  exit={{ opacity: 0, y: -4, x: "-50%", scale: 0.98 }}
+                  transition={{ duration: 0.16, ease: "easeOut" }}
+                  style={{ backgroundColor: "#ffffff" }}
+                  className="absolute top-[calc(100%+36px)] left-1/2 w-[380px] p-3.5 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.18)] border border-neutral-100 z-[60]"
+                >
+                  {/* Invisible bridge over the gap to prevent mouse leave */}
+                  <div className="absolute -top-[36px] left-0 right-0 h-[36px]" />
+
+                  {/* Insights Items */}
+                  <div className="flex flex-col space-y-1">
+                    {INSIGHTS_ITEMS.map((item) => {
+                      const isActive = location.pathname === item.path;
+                      const Icon = item.icon;
+                      return (
+                        <Link
+                          key={item.path}
+                          to={item.path}
+                          onClick={() => setInsightsOpen(false)}
+                          className={`group flex items-center gap-3.5 p-2.5 rounded-2xl transition-all duration-150 ${
+                            isActive
+                              ? "bg-neutral-100/90 text-brand-pink"
+                              : "hover:bg-neutral-50 text-neutral-900"
+                          }`}
+                        >
+                          <div
+                            className={`w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-105 ${item.lightBg}`}
+                          >
+                            <Icon size={20} />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h4
+                              className={`text-[13.5px] font-bold leading-snug line-clamp-1 transition-colors ${
+                                isActive
+                                  ? "text-brand-pink"
+                                  : "text-neutral-900 group-hover:text-brand-pink"
+                              }`}
+                            >
+                              {item.title}
+                            </h4>
+                            <p className="text-[11.5px] text-neutral-500 leading-tight line-clamp-1 mt-0.5 font-normal">
+                              {item.desc}
+                            </p>
+                          </div>
+                        </Link>
+                      );
+                    })}
+                  </div>
+
+                  {/* Clean All Insights Footer Link */}
+                  <div className="mt-2 pt-2 border-t border-neutral-100">
+                    <Link
+                      to="/insights"
+                      onClick={() => setInsightsOpen(false)}
+                      className="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold text-neutral-600 hover:text-brand-pink hover:bg-neutral-50 transition-colors"
+                    >
+                      <span>All Insights Overview</span>
+                      <ArrowRight size={14} className="text-brand-pink" />
+                    </Link>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
           <Link to="/careers" className={getLinkClass("/careers")}>
             Careers
           </Link>
-          {/* <Link
-            to="/certifications"
-            className={getLinkClass("/certifications")}
-          >
-            Certifications
-          </Link> */}
           <Link to="/leadership" className={getLinkClass("/leadership")}>
             Leadership
+          </Link>
+          <Link to="/gallery" className={getLinkClass("/gallery")}>
+            Gallery
           </Link>
         </div>
 
@@ -145,7 +511,7 @@ export function Navigation({ variant = "light" }: NavigationProps) {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "tween", duration: 0.3 }}
-              className="fixed top-0 right-0 bottom-0 w-[70%] bg-white z-[110] lg:hidden flex flex-col"
+              className="fixed top-0 right-0 bottom-0 w-[80%] max-w-sm bg-white z-[110] lg:hidden flex flex-col"
             >
               {/* Panel header — logo + close in one row */}
               <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-100">
@@ -164,30 +530,213 @@ export function Navigation({ variant = "light" }: NavigationProps) {
               </div>
 
               {/* Nav links */}
-              <div className="flex-1 flex flex-col px-8 pt-8 pb-8 overflow-y-auto">
-                <div className="flex flex-col gap-6">
-                  {[
-                    { to: "/", label: "Home" },
-                    { to: "/about", label: "About" },
-                    { to: "/services", label: "Services" },
-                    { to: "/insights", label: "Insights" },
-                    { to: "/careers", label: "Careers" },
-                    // { to: "/certifications", label: "Certifications" },
-                    { to: "/leadership", label: "Leadership" },
-                  ].map(({ to, label }) => (
-                    <Link
-                      key={to}
-                      to={to}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className={getMobileLinkClass(to)}
-                    >
-                      {label}
-                    </Link>
-                  ))}
+              <div className="flex-1 flex flex-col px-6 pt-6 pb-6 overflow-y-auto">
+                <div className="flex flex-col gap-4">
+                  <Link
+                    to="/"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={getMobileLinkClass("/")}
+                  >
+                    Home
+                  </Link>
+
+                  <Link
+                    to="/about"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={getMobileLinkClass("/about")}
+                  >
+                    About
+                  </Link>
+
+                  {/* Services Accordion on Mobile */}
+                  <div className="flex flex-col border-b border-neutral-100 pb-3">
+                    <div className="flex items-center justify-between">
+                      <Link
+                        to="/services"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={getMobileLinkClass("/services")}
+                      >
+                        Services
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => setMobileServicesOpen((prev) => !prev)}
+                        className="p-1.5 text-neutral-500 hover:text-brand-pink transition-colors"
+                        aria-label="Toggle Services submenu"
+                      >
+                        <ChevronDown
+                          size={20}
+                          className={`transition-transform duration-200 ${
+                            mobileServicesOpen
+                              ? "rotate-180 text-brand-pink"
+                              : ""
+                          }`}
+                        />
+                      </button>
+                    </div>
+
+                    <AnimatePresence>
+                      {mobileServicesOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="overflow-hidden pl-3 mt-3 border-l-2 border-brand-pink/30 flex flex-col gap-2.5"
+                        >
+                          <Link
+                            to="/services"
+                            onClick={() => setMobileMenuOpen(false)}
+                            className={`text-xs font-bold tracking-wider uppercase py-1 ${
+                              location.pathname === "/services"
+                                ? "text-brand-pink"
+                                : "text-neutral-500 hover:text-brand-pink"
+                            }`}
+                          >
+                            All Services Overview →
+                          </Link>
+                          {servicesList.map((service) => {
+                            const isCurrent =
+                              location.pathname === service.path;
+                            const Icon = service.icon;
+                            return (
+                              <Link
+                                key={service.path}
+                                to={service.path}
+                                onClick={() => setMobileMenuOpen(false)}
+                                className={`flex items-center gap-2.5 p-1.5 rounded-xl transition-colors ${
+                                  isCurrent
+                                    ? "bg-neutral-100 text-brand-pink font-semibold"
+                                    : "hover:bg-neutral-50 text-neutral-800"
+                                }`}
+                              >
+                                <div
+                                  className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${service.lightBg}`}
+                                >
+                                  <Icon size={15} />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <div className="text-xs font-bold leading-tight line-clamp-1">
+                                    {service.title}
+                                  </div>
+                                  <div className="text-[10.5px] text-neutral-500 leading-tight line-clamp-1 mt-0.5">
+                                    {service.desc}
+                                  </div>
+                                </div>
+                              </Link>
+                            );
+                          })}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  {/* Insights Accordion on Mobile */}
+                  <div className="flex flex-col border-b border-neutral-100 pb-3">
+                    <div className="flex items-center justify-between">
+                      <Link
+                        to="/insights"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={getMobileLinkClass("/insights")}
+                      >
+                        Insights
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => setMobileInsightsOpen((prev) => !prev)}
+                        className="p-1.5 text-neutral-500 hover:text-brand-pink transition-colors"
+                        aria-label="Toggle Insights submenu"
+                      >
+                        <ChevronDown
+                          size={20}
+                          className={`transition-transform duration-200 ${
+                            mobileInsightsOpen
+                              ? "rotate-180 text-brand-pink"
+                              : ""
+                          }`}
+                        />
+                      </button>
+                    </div>
+
+                    <AnimatePresence>
+                      {mobileInsightsOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="overflow-hidden pl-3 mt-3 border-l-2 border-brand-pink/30 flex flex-col gap-2.5"
+                        >
+                          <Link
+                            to="/insights"
+                            onClick={() => setMobileMenuOpen(false)}
+                            className={`text-xs font-bold tracking-wider uppercase py-1 ${
+                              location.pathname === "/insights"
+                                ? "text-brand-pink"
+                                : "text-neutral-500 hover:text-brand-pink"
+                            }`}
+                          >
+                            All Insights Overview →
+                          </Link>
+                          {INSIGHTS_ITEMS.map((item) => {
+                            const isCurrent = location.pathname === item.path;
+                            const Icon = item.icon;
+                            return (
+                              <Link
+                                key={item.path}
+                                to={item.path}
+                                onClick={() => setMobileMenuOpen(false)}
+                                className={`flex items-center gap-2.5 p-1.5 rounded-xl transition-colors ${
+                                  isCurrent
+                                    ? "bg-neutral-100 text-brand-pink font-semibold"
+                                    : "hover:bg-neutral-50 text-neutral-800"
+                                }`}
+                              >
+                                <div
+                                  className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${item.lightBg}`}
+                                >
+                                  <Icon size={15} />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <div className="text-xs font-bold leading-tight line-clamp-1">
+                                    {item.title}
+                                  </div>
+                                  <div className="text-[10.5px] text-neutral-500 leading-tight line-clamp-1 mt-0.5">
+                                    {item.desc}
+                                  </div>
+                                </div>
+                              </Link>
+                            );
+                          })}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                  <Link
+                    to="/careers"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={getMobileLinkClass("/careers")}
+                  >
+                    Careers
+                  </Link>
+                  <Link
+                    to="/leadership"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={getMobileLinkClass("/leadership")}
+                  >
+                    Leadership
+                  </Link>
+                  <Link
+                    to="/gallery"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={getMobileLinkClass("/gallery")}
+                  >
+                    Gallery
+                  </Link>
                 </div>
 
                 {/* Contact CTA */}
-                <div className="mt-10 pt-8 border-t border-neutral-200">
+                <div className="mt-8 pt-6 border-t border-neutral-200">
                   <Link
                     to="/contact"
                     onClick={() => setMobileMenuOpen(false)}
@@ -198,7 +747,7 @@ export function Navigation({ variant = "light" }: NavigationProps) {
                 </div>
 
                 {/* Since badge */}
-                <div className="mt-auto pt-8">
+                <div className="mt-auto pt-6">
                   <div className="flex items-center gap-2 px-3 py-2 rounded-full border border-neutral-200 text-xs font-medium text-neutral-600 w-fit">
                     <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
                     SINCE 2009

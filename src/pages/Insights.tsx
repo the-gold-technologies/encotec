@@ -87,7 +87,7 @@ function InsightsHero() {
         >
           <img
             src={bgImage}
-            alt={heroTitle || "Insights"}
+            alt={heroTitle || ""}
             className="w-full h-full object-cover opacity-40"
           />
 
@@ -235,13 +235,16 @@ function FeaturedInsight() {
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 1000], [0, -100]);
   const { data } = useSectionData<any>("insights", "FeaturedInsight");
-  const { data: articlesData } = useSectionData<any>("insights", "ArticlesList");
+  const { data: articlesData } = useSectionData<any>(
+    "insights",
+    "ArticlesList",
+  );
 
   const articlesList = Array.isArray(articlesData?.articles)
     ? articlesData.articles
     : Array.isArray(articlesData?.items)
-    ? articlesData.items
-    : [];
+      ? articlesData.items
+      : [];
   const firstArticle = articlesList[0];
 
   const badgeLabel = data.badgeLabel;
@@ -309,7 +312,7 @@ function FeaturedInsight() {
                   {badgeLabel}
                 </div>
               )}
-              <h2 className="text-4xl md:text-6xl font-black text-white mb-6 leading-tight tracking-tight group-hover:text-brand-pink/90 transition-colors duration-300">
+              <h2 className="text-4xl md:text-6xl font-black text-brand-pink mb-6 leading-tight tracking-tight group-hover:opacity-90 transition-opacity duration-300">
                 {title}
               </h2>
               {summary && (
@@ -347,32 +350,8 @@ function FeaturedInsight() {
   );
 }
 
-// Content Grid Section
-function ContentGrid() {
-  const { data: articlesData } = useSectionData<any>("insights", "ArticlesList");
-  const { data: relatedData } = useSectionData<any>("insights", "RelatedInsights");
-
-  const displayArticles = Array.isArray(articlesData?.articles)
-    ? articlesData.articles
-    : Array.isArray(articlesData?.items)
-    ? articlesData.items
-    : Array.isArray(articlesData)
-    ? articlesData
-    : [];
-
-  const emptyMessage = articlesData?.emptyMessage;
-  const readMoreLabel = relatedData?.readMoreLabel;
-
-  const [activeFilter, setActiveFilter] = useState("All");
-  const filters = ["All", "Case Studies", "News", "Blogs"];
-  const filteredData = displayArticles.filter((item: any) => {
-    if (activeFilter === "All") return true;
-    if (activeFilter === "Case Studies") return item.category === "Case Study";
-    if (activeFilter === "News") return item.category === "News";
-    if (activeFilter === "Blogs") return item.category === "Blog";
-    return true;
-  });
-
+// Reusable Insight Card (matches Image 2 style)
+function InsightCardItem({ item }: { item: any }) {
   const getCategoryColor = (category: string) => {
     switch (category) {
       case "Case Study":
@@ -380,159 +359,254 @@ function ContentGrid() {
       case "News":
         return "bg-blue-500 text-white";
       case "Blog":
-        return "bg-green-500 text-white";
+        return "bg-emerald-600 text-white";
       default:
         return "bg-neutral-800 text-white";
     }
   };
 
   return (
-    <section className="py-20 bg-neutral-50 min-h-screen">
-      <div className="max-w-7xl mx-auto px-6 lg:px-10">
-        {/* Filter Tabs */}
-        <div className="flex flex-wrap items-center gap-8 mb-16 border-b border-neutral-200">
-          {filters.map((filter) => (
-            <button
-              key={filter}
-              onClick={() => setActiveFilter(filter)}
-              className={`relative pb-4 text-sm font-bold tracking-wider uppercase transition-colors duration-300 ${activeFilter === filter ? "text-brand-pink" : "text-neutral-500 hover:text-neutral-900"}`}
-            >
-              {filter}
-              {activeFilter === filter && (
-                <motion.div
-                  layoutId="activeTab"
-                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-pink"
-                  transition={{
-                    type: "spring",
-                    stiffness: 300,
-                    damping: 30,
-                  }}
-                />
-              )}
-            </button>
-          ))}
-        </div>
-
-        {/* Grid */}
-        <motion.div
-          layout
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-        >
-          <AnimatePresence mode="popLayout">
-            {filteredData.map((item: any, index: number) => (
-              <motion.div
-                key={item.id || item.slug || index}
-                layout
-                initial={{
-                  opacity: 0,
-                  scale: 0.9,
-                  y: 20,
-                }}
-                animate={{
-                  opacity: 1,
-                  scale: 1,
-                  y: 0,
-                }}
-                exit={{
-                  opacity: 0,
-                  scale: 0.9,
-                  transition: {
-                    duration: 0.2,
-                  },
-                }}
-                transition={{
-                  duration: 0.4,
-                  delay: index * 0.05,
-                }}
-                whileHover={{
-                  y: -8,
-                }}
-                className={`group bg-white border border-neutral-200 hover:border-brand-pink/30 transition-all duration-300 overflow-hidden flex flex-col ${index === 0 && activeFilter !== "All" ? "md:col-span-2 lg:col-span-2" : ""}`}
-              >
-                <Link
-                  to={`/insights/${item.slug}`}
-                  className="flex flex-col h-full"
+    <motion.div
+      whileHover={{ y: -6 }}
+      transition={{ duration: 0.2 }}
+      className="group bg-white border border-neutral-200 hover:border-brand-pink/40 transition-all duration-300 overflow-hidden flex flex-col shadow-sm hover:shadow-xl"
+    >
+      <Link to={`/insights/${item.slug}`} className="flex flex-col h-full">
+        {/* Photo with top-left badge */}
+        {item.image && (
+          <div className="relative aspect-[16/10] overflow-hidden bg-neutral-100">
+            <img
+              src={item.image}
+              alt={item.title || ""}
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              loading="lazy"
+            />
+            {item.category && (
+              <div className="absolute top-4 left-4">
+                <span
+                  className={`px-3 py-1 text-[10px] font-bold uppercase tracking-wider ${getCategoryColor(
+                    item.category,
+                  )}`}
                 >
-                  {/* Image */}
-                  {item.image && (
-                    <div
-                      className={`relative overflow-hidden ${index === 0 && activeFilter !== "All" ? "h-80" : "h-60"}`}
-                    >
-                      <motion.img
-                        whileHover={{
-                          scale: 1.05,
-                        }}
-                        transition={{
-                          duration: 0.6,
-                        }}
-                        src={item.image}
-                        alt={item.title}
-                        className="w-full h-full object-cover"
-                      />
+                  {item.category}
+                </span>
+              </div>
+            )}
+          </div>
+        )}
 
-                      {item.category && (
-                        <div className="absolute top-4 left-4">
-                          <span
-                            className={`px-3 py-1 text-[10px] font-bold uppercase tracking-wider ${getCategoryColor(item.category)}`}
-                          >
-                            {item.category}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  )}
+        {/* Content */}
+        <div className="p-7 flex flex-col flex-grow">
+          {/* Meta icons */}
+          <div className="flex flex-wrap items-center gap-4 text-xs font-medium text-neutral-500 mb-4">
+            {item.date && (
+              <div className="flex items-center gap-1.5">
+                <CalendarIcon size={14} className="text-neutral-400" />
+                <span>{item.date}</span>
+              </div>
+            )}
+            {item.location && (
+              <div className="flex items-center gap-1.5">
+                <MapPinIcon size={14} className="text-neutral-400" />
+                <span>{item.location}</span>
+              </div>
+            )}
+            {item.readTime && (
+              <div className="flex items-center gap-1.5">
+                <ClockIcon size={14} className="text-neutral-400" />
+                <span>{item.readTime}</span>
+              </div>
+            )}
+          </div>
 
-                  {/* Content */}
-                  <div className="p-8 flex flex-col flex-grow">
-                    <div className="flex items-center gap-4 text-xs font-medium text-neutral-500 mb-4">
-                      {item.date && (
-                        <div className="flex items-center gap-1.5">
-                          <CalendarIcon size={14} />
-                          {item.date}
-                        </div>
-                      )}
-                      {item.location && (
-                        <div className="flex items-center gap-1.5">
-                          <MapPinIcon size={14} />
-                          {item.location}
-                        </div>
-                      )}
-                      {item.readTime && (
-                        <div className="flex items-center gap-1.5">
-                          <ClockIcon size={14} />
-                          {item.readTime}
-                        </div>
-                      )}
-                    </div>
+          {/* Title */}
+          <h3 className="font-black text-brand-pink mb-3 text-lg md:text-xl uppercase tracking-tight group-hover:opacity-90 transition-opacity duration-300 line-clamp-2 leading-snug">
+            {item.title}
+          </h3>
 
-                    <h3
-                      className={`font-black text-neutral-900 mb-4 uppercase tracking-tight group-hover:text-brand-pink transition-colors duration-300 ${index === 0 && activeFilter !== "All" ? "text-3xl" : "text-xl"}`}
-                    >
-                      {item.title}
-                    </h3>
+          {/* Description */}
+          {item.description && (
+            <p className="text-neutral-600 text-sm leading-relaxed mb-6 line-clamp-3 font-normal">
+              {item.description}
+            </p>
+          )}
 
-                    {item.description && (
-                      <p className="text-neutral-600 leading-relaxed mb-8 flex-grow">
-                        {item.description}
-                      </p>
-                    )}
+          {/* Read More button */}
+          <div className="mt-auto pt-4 border-t border-neutral-100">
+            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-pink group-hover:gap-2.5 transition-all duration-300 uppercase tracking-wider">
+              <span>Read More</span>
+              <ChevronRightIcon size={14} />
+            </span>
+          </div>
+        </div>
+      </Link>
+    </motion.div>
+  );
+}
 
-                    {readMoreLabel && (
-                      <div className="inline-flex items-center gap-2 text-sm font-bold text-neutral-900 group-hover:text-brand-pink group-hover:gap-3 transition-all duration-300 uppercase tracking-wider mt-auto">
-                        {readMoreLabel}
-                        <ChevronRightIcon size={16} />
-                      </div>
-                    )}
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
+// Content Grid Section - Displays Categorized Sections with "View All" links
+function ContentGrid() {
+  const { data: articlesData } = useSectionData<any>(
+    "insights",
+    "ArticlesList",
+  );
 
-        {filteredData.length === 0 && emptyMessage && (
-          <div className="py-20 text-center text-neutral-500">
-            {emptyMessage}
+  const displayArticles: any[] = Array.isArray(articlesData?.articles)
+    ? articlesData.articles
+    : Array.isArray(articlesData?.items)
+      ? articlesData.items
+      : [];
+
+  const caseStudies = displayArticles.filter(
+    (item: any) => item?.category === "Case Study",
+  );
+
+  const newsItems = displayArticles.filter(
+    (item: any) => item?.category === "News",
+  );
+
+  const blogItems = displayArticles.filter(
+    (item: any) => item?.category === "Blog",
+  );
+
+  const caseTagline = articlesData?.caseStudiesTagline || "";
+  const caseHeading = articlesData?.caseStudiesHeading || "";
+  const caseSubtitle = articlesData?.caseStudiesSubtitle || "";
+  const caseViewAll = articlesData?.caseStudiesViewAllText || "";
+
+  const newsTagline = articlesData?.newsTagline || "";
+  const newsHeading = articlesData?.newsHeading || "";
+  const newsSubtitle = articlesData?.newsSubtitle || "";
+  const newsViewAll = articlesData?.newsViewAllText || "";
+
+  const blogTagline = articlesData?.blogsTagline || "";
+  const blogHeading = articlesData?.blogsHeading || "";
+  const blogSubtitle = articlesData?.blogsSubtitle || "";
+  const blogViewAll = articlesData?.blogsViewAllText || "";
+
+  return (
+    <section className="py-20 bg-neutral-50 space-y-24">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        {/* --- 1. CASE STUDIES SECTION --- */}
+        {caseStudies.length > 0 && (
+          <div className="mb-24">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 pb-6 border-b border-neutral-200">
+              <div>
+                {caseTagline && (
+                  <span className="text-xs font-bold tracking-[0.2em] text-brand-pink uppercase block mb-2">
+                    {caseTagline}
+                  </span>
+                )}
+                {caseHeading && (
+                  <h2 className="text-3xl md:text-4xl font-black text-neutral-900 tracking-tight">
+                    {caseHeading}
+                  </h2>
+                )}
+                {caseSubtitle && (
+                  <p className="text-neutral-500 text-sm mt-1 max-w-xl">
+                    {caseSubtitle}
+                  </p>
+                )}
+              </div>
+
+              <Link
+                to="/insights/case-studies"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-brand-pink/10 hover:bg-brand-pink text-brand-pink hover:text-white text-xs font-bold uppercase tracking-wider transition-all duration-300 shrink-0"
+              >
+                <span>
+                  {caseViewAll} ({caseStudies.length})
+                </span>
+                <ArrowRightIcon size={14} />
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {caseStudies.slice(0, 3).map((item) => (
+                <InsightCardItem key={item.id || item.slug} item={item} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* --- 2. NEWS & UPDATES SECTION --- */}
+        {newsItems.length > 0 && (
+          <div className="mb-24">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 pb-6 border-b border-neutral-200">
+              <div>
+                {newsTagline && (
+                  <span className="text-xs font-bold tracking-[0.2em] text-blue-600 uppercase block mb-2">
+                    {newsTagline}
+                  </span>
+                )}
+                {newsHeading && (
+                  <h2 className="text-3xl md:text-4xl font-black text-neutral-900 tracking-tight">
+                    {newsHeading}
+                  </h2>
+                )}
+                {newsSubtitle && (
+                  <p className="text-neutral-500 text-sm mt-1 max-w-xl">
+                    {newsSubtitle}
+                  </p>
+                )}
+              </div>
+
+              <Link
+                to="/insights/news-updates"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-blue-50 hover:bg-blue-600 text-blue-600 hover:text-white text-xs font-bold uppercase tracking-wider transition-all duration-300 shrink-0"
+              >
+                <span>
+                  {newsViewAll} ({newsItems.length})
+                </span>
+                <ArrowRightIcon size={14} />
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {newsItems.slice(0, 3).map((item) => (
+                <InsightCardItem key={item.id || item.slug} item={item} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* --- 3. BLOGS & ARTICLES SECTION --- */}
+        {blogItems.length > 0 && (
+          <div>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 pb-6 border-b border-neutral-200">
+              <div>
+                {blogTagline && (
+                  <span className="text-xs font-bold tracking-[0.2em] text-emerald-600 uppercase block mb-2">
+                    {blogTagline}
+                  </span>
+                )}
+                {blogHeading && (
+                  <h2 className="text-3xl md:text-4xl font-black text-neutral-900 tracking-tight">
+                    {blogHeading}
+                  </h2>
+                )}
+                {blogSubtitle && (
+                  <p className="text-neutral-500 text-sm mt-1 max-w-xl">
+                    {blogSubtitle}
+                  </p>
+                )}
+              </div>
+
+              <Link
+                to="/insights/blogs-articles"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-emerald-50 hover:bg-emerald-600 text-emerald-600 hover:text-white text-xs font-bold uppercase tracking-wider transition-all duration-300 shrink-0"
+              >
+                <span>
+                  {blogViewAll} ({blogItems.length})
+                </span>
+                <ArrowRightIcon size={14} />
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {blogItems.slice(0, 3).map((item) => (
+                <InsightCardItem key={item.id || item.slug} item={item} />
+              ))}
+            </div>
           </div>
         )}
       </div>
@@ -547,10 +621,11 @@ function StatsBanner() {
   const rawStats = Array.isArray(data?.stats)
     ? data.stats
     : Array.isArray(data?.statsList)
-    ? data.statsList
-    : null;
+      ? data.statsList
+      : null;
 
-  let stats: Array<{ value: number | string; suffix: string; label: string }> = [];
+  let stats: Array<{ value: number | string; suffix: string; label: string }> =
+    [];
 
   if (rawStats && rawStats.length > 0) {
     stats = rawStats.map((s: any) => {
@@ -566,9 +641,15 @@ function StatsBanner() {
   } else if (data) {
     const legacyKeys = [1, 2, 3, 4];
     legacyKeys.forEach((i) => {
-      const valStr = String(data[`stat${i}Value`] || data[`stats${i}Value`] || "");
-      const sufStr = String(data[`stat${i}Suffix`] || data[`stats${i}Suffix`] || "");
-      const labelStr = String(data[`stat${i}Label`] || data[`stats${i}Label`] || "");
+      const valStr = String(
+        data[`stat${i}Value`] || data[`stats${i}Value`] || "",
+      );
+      const sufStr = String(
+        data[`stat${i}Suffix`] || data[`stats${i}Suffix`] || "",
+      );
+      const labelStr = String(
+        data[`stat${i}Label`] || data[`stats${i}Label`] || "",
+      );
       if (valStr || labelStr) {
         const num = parseInt(valStr.replace(/,/g, ""), 10);
         stats.push({
@@ -717,7 +798,8 @@ function CTASection() {
   const primaryBtnLabel = data.primaryBtnLabel || data.primaryLabel;
   const primaryBtnUrl = data.primaryBtnUrl || data.primaryUrl || "/contact";
   const secondaryBtnLabel = data.secondaryBtnLabel || data.secondaryLabel;
-  const secondaryBtnUrl = data.secondaryBtnUrl || data.secondaryUrl || "/services";
+  const secondaryBtnUrl =
+    data.secondaryBtnUrl || data.secondaryUrl || "/services";
 
   if (!ctaHeading) return null;
 
