@@ -310,6 +310,9 @@ export function Navigation({ variant = "light" }: NavigationProps) {
           <Link to="/leadership" className={getLinkClass("/leadership")}>
             Leadership
           </Link>
+          <Link to="/gallery" className={getLinkClass("/gallery")}>
+            Gallery
+          </Link>
         </div>
 
         {/* Desktop contact CTA */}
@@ -496,6 +499,13 @@ export function Navigation({ variant = "light" }: NavigationProps) {
                     className={getMobileLinkClass("/leadership")}
                   >
                     Leadership
+                  </Link>
+                  <Link
+                    to="/gallery"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={getMobileLinkClass("/gallery")}
+                  >
+                    Gallery
                   </Link>
                 </div>
 

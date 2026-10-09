@@ -16,6 +16,7 @@ import { Contact } from "./pages/Contact";
 import { Careers } from "./pages/Careers";
 import { Certifications } from "./pages/Certifications";
 import { Leadership } from "./pages/Leadership";
+import { Gallery } from "./pages/Gallery";
 import { PrivacyPolicy } from "./pages/PrivacyPolicy";
 import { CookiePolicy } from "./pages/CookiePolicy";
 import { ScrollToTop } from "./components/ScrollToTop";
@@ -207,6 +208,7 @@ export function App() {
         <Route path="/careers" element={<Careers />} />
         <Route path="/certifications" element={<Certifications />} />
         <Route path="/leadership" element={<Leadership />} />
+        <Route path="/gallery" element={<Gallery />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/cookies" element={<CookiePolicy />} />
