@@ -216,6 +216,7 @@ export function App() {
         <Route path="/insights/blogs" element={<BlogsArticlesPage />} />
         <Route path="/insights/:slug" element={<InsightDetail />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/careers" element={<Careers />} />
         {/* <Route path="/certifications" element={<Certifications />} /> */}
         <Route path="/certifications" element={<Navigate to="/" replace />} />
         <Route path="/leadership" element={<Leadership />} />

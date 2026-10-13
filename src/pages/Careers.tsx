@@ -877,15 +877,15 @@ function ApplicationProcess() {
   const tagline = data.tagline;
   const heading = data.heading;
   const subtitle = data.subtitle;
-  const steps: Array<{ step: string; title: string; desc: string }> =
-    Array.isArray(data.processSteps)
-      ? data.processSteps
-      : Array.isArray(data.processSteps)
-        ? data.processSteps
-        : [];
+  const steps: Array<{
+    step?: string;
+    title: string;
+    desc?: string;
+    description?: string;
+  }> = Array.isArray(data.processSteps) ? data.processSteps : [];
 
   if (!heading && steps.length === 0) return null;
-  console.log(data);
+
   return (
     <section className="py-32 bg-neutral-50 border-t border-neutral-200">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
@@ -923,6 +923,7 @@ function ApplicationProcess() {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
           {steps.map((item, index) => {
             const Icon = processIcons[index % processIcons.length];
+            const stepDesc = item.desc || item.description;
             return (
               <motion.div
                 key={index}
@@ -952,9 +953,9 @@ function ApplicationProcess() {
                 <h3 className="text-xl font-bold text-neutral-900 mb-3">
                   {item.title}
                 </h3>
-                {item.desc && (
+                {stepDesc && (
                   <p className="text-sm text-neutral-600 leading-relaxed">
-                    {item.desc}
+                    {stepDesc}
                   </p>
                 )}
               </motion.div>
