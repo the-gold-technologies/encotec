@@ -1,4 +1,5 @@
 import React from "react";
+import { CtaLink } from "../components/CtaLink";
 import { Link } from "react-router-dom";
 import { Footer } from "../components/Footer";
 import { Navigation } from "../components/Navigation";
@@ -1001,13 +1002,13 @@ function ClosingStatement() {
             {data.description}
           </p>
 
-          <Link
+          <CtaLink
             to={data.ctaUrl || "/contact"}
             className="inline-flex items-center gap-3 px-10 py-5 bg-brand-pink text-white text-sm font-bold tracking-wider uppercase hover:bg-[#a0004f] transition-colors duration-300 shadow-2xl shadow-brand-pink/30 mt-12"
           >
             {data.ctaLabel}
             <ArrowRightIcon size={18} />
-          </Link>
+          </CtaLink>
         </motion.div>
       </div>
     </section>

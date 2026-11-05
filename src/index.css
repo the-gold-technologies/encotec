@@ -20,6 +20,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Respect line breaks typed in CMS text fields (Enter = new line, blank line = paragraph gap).
+   pre-line keeps newlines but still collapses extra spaces, so normal JSX text is unaffected. */
+p, li, blockquote, figcaption, dd, td, h1, h2, h3, h4, h5, h6, .cms-text {
+  white-space: pre-line;
+}
+
 /* Hide scrollbar for horizontal scroll areas but keep functionality */
 .no-scrollbar::-webkit-scrollbar {
   display: none;

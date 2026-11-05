@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { ArrowRightIcon } from 'lucide-react';
+import { CtaLink } from '../CtaLink';
 import { motion } from 'framer-motion';
-import { Button } from '../ui/Button';
 import { useSectionData } from '../../store/useCMSStore';
 
 
@@ -71,11 +71,13 @@ export function WhyEncotec() {
               <p className="text-neutral-600 leading-relaxed text-sm mb-6">
                 {block.text}
               </p>
-              <Link to="/contact">
-                <Button variant="ghost" size="sm" withArrow>
-                  Get in Touch
-                </Button>
-              </Link>
+              <CtaLink
+                to=""
+                className="group inline-flex items-center justify-center font-medium transition-all duration-300 rounded-full text-sm px-4 py-2 bg-transparent text-neutral-900 hover:text-brand-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-pink"
+              >
+                Get in Touch
+                <ArrowRightIcon className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </CtaLink>
             </motion.div>
           )}
         </div>

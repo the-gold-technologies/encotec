@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { CtaLink } from "../components/CtaLink";
 import { Link } from "react-router-dom";
 import { Footer } from "../components/Footer";
 import { Navigation } from "../components/Navigation";
@@ -993,12 +994,12 @@ function JoinCTA() {
               </Link>
             )}
             {ctaLabel2 && (
-              <Link
+              <CtaLink
                 to={ctaUrl2}
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 border-2 border-white text-white text-sm font-bold tracking-wider uppercase hover:bg-white hover:text-neutral-900 transition-all duration-300"
               >
                 {ctaLabel2}
-              </Link>
+              </CtaLink>
             )}
           </div>
         </motion.div>

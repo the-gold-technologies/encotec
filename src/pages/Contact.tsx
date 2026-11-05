@@ -206,6 +206,7 @@ function ContactFormSection() {
           phone: phone,
           companyName: company,
           location: location,
+          sourcePage: window.location.pathname,
           projectGoals: `Phone: ${phone || "N/A"}\nCompany: ${company || "N/A"}\nLocation: ${location || "N/A"}\nService Required: ${finalSubject}\nMessage:\n${message}`,
         }),
       });
