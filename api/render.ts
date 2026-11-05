@@ -2,15 +2,17 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import fs from "fs";
 import path from "path";
 
-const slugMap: Record<string, string> = {
-  "service/engineering": "engineering-services",
-  "service/project-management": "project-management",
-  "service/power-generation": "power-generation",
-  "service/transmission-distribution": "transmission-distribution",
-  "service/renewable-energy": "renewable-energy",
-  "service/airport-services": "airport-services",
-  "service/value-added": "value-added",
-};
+// Must match the CMS (encotech-cms/src/lib/seoSlug.ts) and the routes in src/App.tsx.
+const SERVICE_SUBPAGES = [
+  "project-management",
+  "power-generation",
+  "construction-commissioning",
+  "technical-advisory",
+  "due-diligence",
+  "value-added",
+];
+
+const INSIGHTS_SUBPAGES = ["case-studies", "news-updates", "blogs-articles"];
 
 function getSlugFromPath(urlPath: string): string {
   const pathPart = urlPath.split("?")[0] || "/";
@@ -29,18 +31,18 @@ function getSlugFromPath(urlPath: string): string {
   if (cleanPath === "/certifications") return "certifications";
   if (cleanPath === "/leadership") return "leadership";
 
-  // Sub-services
-  if (cleanPath === "/services/engineering") return "service/engineering";
-  if (cleanPath === "/services/project-management")
-    return "service/project-management";
-  if (cleanPath === "/services/power-generation")
-    return "service/power-generation";
-  if (cleanPath === "/services/transmission-distribution")
-    return "service/transmission-distribution";
-  if (cleanPath === "/services/renewable-energy")
-    return "service/renewable-energy";
-  if (cleanPath === "/services/airport-services")
-    return "service/airport-services";
+  // Sub-services: /services/<id> -> "service/<id>"
+  const serviceMatch = cleanPath.match(/^\/services\/([^/]+)$/);
+  if (serviceMatch && SERVICE_SUBPAGES.includes(serviceMatch[1])) {
+    return `service/${serviceMatch[1]}`;
+  }
+
+  // Insights listing sub-pages: /insights/<id> -> "insights/<id>"
+  const insightsMatch = cleanPath.match(/^\/insights\/([^/]+)$/);
+  if (insightsMatch && INSIGHTS_SUBPAGES.includes(insightsMatch[1])) {
+    return `insights/${insightsMatch[1]}`;
+  }
+
   if (cleanPath === "/privacy" || cleanPath === "/privacy-policy")
     return "privacy-policy";
   if (cleanPath === "/cookies" || cleanPath === "/cookie-policy")
