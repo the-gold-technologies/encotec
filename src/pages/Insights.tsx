@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { CtaLink } from "../components/CtaLink";
 import { Link } from "react-router-dom";
 import { Footer } from "../components/Footer";
 import { Navigation } from "../components/Navigation";
@@ -837,13 +838,13 @@ function CTASection() {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             {primaryBtnLabel && (
-              <Link
+              <CtaLink
                 to={primaryBtnUrl}
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-brand-pink text-white text-sm font-bold tracking-wider uppercase hover:bg-[#a0004f] transition-colors duration-300"
               >
                 {primaryBtnLabel}
                 <ArrowRightIcon size={16} />
-              </Link>
+              </CtaLink>
             )}
             {secondaryBtnLabel && (
               <Link

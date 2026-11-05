@@ -1,4 +1,5 @@
 import React from "react";
+import { CtaLink } from "../../components/CtaLink";
 import { Link } from "react-router-dom";
 import { Navigation } from "../../components/Navigation";
 import { Footer } from "../../components/Footer";
@@ -394,12 +395,12 @@ export function BlogsArticlesPage() {
               </div>
 
               {ctaButtonText && (
-                <Link
+                <CtaLink
                   to={ctaButtonLink}
                   className="px-8 py-4 bg-brand-pink hover:bg-[#a0004f] text-white text-xs font-bold tracking-wider uppercase transition-all shadow-lg shrink-0"
                 >
                   {ctaButtonText}
-                </Link>
+                </CtaLink>
               )}
             </div>
           )}

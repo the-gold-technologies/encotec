@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { CtaLink } from "../../components/CtaLink";
 import { Link } from "react-router-dom";
 import { Navigation } from "../../components/Navigation";
 import { Footer } from "../../components/Footer";
@@ -406,13 +407,13 @@ function CTASection() {
           {data.heading}
         </h2>
         <p className="text-xl text-neutral-600 mb-10">{data.description}</p>
-        <Link
+        <CtaLink
           to={data.ctaUrl || "/contact"}
           className="inline-flex items-center gap-3 px-8 py-4 bg-brand-pink text-white font-bold tracking-wider uppercase hover:bg-[#a0004f] transition-colors duration-300"
         >
           {data.ctaLabel}
           <ArrowRightIcon size={20} />
-        </Link>
+        </CtaLink>
       </div>
     </section>
   );
