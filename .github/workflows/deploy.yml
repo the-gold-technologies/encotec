@@ -1,0 +1,81 @@
+name: Deploy Encotec Website
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+# Never run two deploys at the same time
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build website
+        run: npm run build
+        env:
+          VITE_CMS_API_URL: ${{ secrets.VITE_CMS_API_URL }}
+
+      - name: Restore static index.html
+        run: |
+          if [ -f api/template.html ]; then
+            cp api/template.html dist/index.html
+          else
+            echo "api/template.html not found"
+            exit 1
+          fi
+
+      - name: Check build output
+        run: |
+          test -f dist/index.html || { echo "dist/index.html missing"; exit 1; }
+          test -d dist/assets || { echo "dist/assets missing"; exit 1; }
+
+      # Upload to a staging folder. The live site in /var/www/encotec/dist is untouched here.
+      - name: Upload to staging folder on VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT }}
+          source: "dist/*"
+          target: "/var/www/encotec/dist_new"
+          strip_components: 1
+          rm: true
+
+      # Swap staging -> live only after the upload is verified. Previous version kept in dist_old.
+      - name: Verify and switch live site
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT }}
+          script: |
+            set -e
+            cd /var/www/encotec
+            test -f dist_new/index.html || { echo "Upload incomplete, live site unchanged"; exit 1; }
+            rm -rf dist_old
+            if [ -d dist ]; then mv dist dist_old; fi
+            mv dist_new dist
+            test -f dist/index.html
+            echo "Encotec website deployment successful"
